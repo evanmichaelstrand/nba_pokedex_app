@@ -42,9 +42,9 @@ Work one item at a time; check it off and commit when done (lint, unit tests, an
   - [x] Footer with non-affiliation notice
   - [x] About dialog: how each stat is built (inputs and weights), contact email
   - [x] Sort by player surname, Pokémon name, and match quality; search by Pokémon type
-- [ ] 12. **Visual design pass** (match the @nbapokedex posts)
+- [x] 12. **Visual design pass** (match the @nbapokedex posts)
   - [x] Stat colors, butterfly + radar charts with toggle, player/Pokémon series colors, Courier Prime font
-  - [x] Graph-paper background, match-quality gauge, surnames in charts (faded player photo and sprite-in-ring deferred)
-  - [ ] Final contrast, focus, and mobile/desktop check
+  - [x] Graph-paper background, match-quality gauge, surnames in charts (faded player photo and sprite-in-ring not planned)
+  - [x] Final contrast, focus, and mobile/desktop check (both themes; axe plus rendered-pixel contrast; every tab stop has visible focus)
 - [x] 13. **E2E smoke tests** — loads, navigates, logo rotates, search narrows the deck, URL round-trips. Plus: 3D deck (neighbors visible, inert, reduced-motion flat), tiny filtered decks, alt text, keyboard-only use with visible focus, and an error-free full session.
-- [ ] 14. **Deploy config** — *blocked on hosting choice (Open question 2).* Bundle-size check (< 150 KB gzipped).
+- [ ] 14. **Deploy config** — *blocked on hosting choice (Open question 1; a custom domain is likely).* Bundle-size check (< 150 KB gzipped; currently about 89 KB).

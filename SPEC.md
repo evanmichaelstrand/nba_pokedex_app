@@ -88,7 +88,7 @@ The columns may be missing entirely (older files): treat that as no adjustments.
 - **Player headshot** (first that loads): the season photo with the main team `https://cdn.nba.com/headshots/nba/{TEAM_ID}/{SEASON_START_YEAR}/1040x760/{PLAYER_ID}.png`, then the season photo with each other team, then `https://cdn.nba.com/headshots/nba/latest/1040x760/{PLAYER_ID}.png`. `TEAM_ID` is NBA.com's numeric team ID from the static team table.
 - **Pokémon sprite** (first that loads): animated Showdown sprite `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/{pokemon_id}.gif`, then official artwork `…/sprites/pokemon/other/official-artwork/{pokemon_id}.png`. Under `prefers-reduced-motion`, use the static official artwork.
 - **Team logos:** `https://cdn.nba.com/logos/nba/{TEAM_ID}/primary/L/logo.svg`, shown next to team names (main and other teams). Unknown teams show no logo.
-- All are hot-linked by ID; no images are stored for players, Pokémon, or teams.
+- All are hot-linked by ID; no images are stored for players, Pokémon, or teams. (Decided: keep hot-linking rather than self-hosting, since copying the images would carry more legal risk.)
 - If an image fails to load, show a neutral silhouette placeholder. Never show a broken-image icon.
 - **Logo:** my nba_pokedex logo, stored in `public/`: `logo-bw.jpg` (line art) and `logo_color_nobg.png` (full color, transparent background; the source file). The app uses `logo-color-128.png`, a 128px copy of the color logo, for the header and browser-tab icon so first load stays light — regenerate it if the source changes.
 
@@ -99,8 +99,8 @@ The columns may be missing entirely (older files): treat that as no adjustments.
 Each entry fills one screen and shows:
 
 1. **NBA player:** name and headshot
-2. **Team(s):** main team's full name with a team-color accent, plus any other teams as secondary text
-3. **Pokémon:** display name (title case, hyphens → spaces where appropriate), official artwork, type badge(s), and Dex number (e.g. `#121`; hide the number when `pokemon_id` is above 10000, since those are form IDs)
+2. **Team(s):** main team's full name with a team-color accent, plus any other teams as secondary text (see "Teams"; on phones, names drop the city)
+3. **Pokémon:** display name (title case, hyphens → spaces where appropriate), official artwork, type badge(s), and Dex number (e.g. `#121`; hide the number when `pokemon_id` is above 10000, since those are form IDs). On phones (under 640px) the type badges are about 30% smaller with no letter spacing, so the Dex number and both types fit on one line.
 4. **Stats for both:** the six stats side by side, player vs. Pokémon, plus each base stat total and the match percentage, shown as a **match-quality gauge** (semicircle, needle from 0% at left to 100% at right) with the exact percent beside it
 
 Done when:
@@ -126,9 +126,9 @@ Done when: all three input methods work, a short swipe (under a threshold) snaps
 
 - The card background carries a faded tint of the player's main team color.
 
-### F1c — Stat breakdowns (bar chart)
+### F1c — Stat breakdowns
 
-- In the **Bars** view, hovering a stat row (mouse) or tapping it (touch) shows how the player's value is built from the CSV's real numbers, each with its percentile where the CSV has one. Tapping the same row again, tapping elsewhere, or Escape closes it. Keyboard: rows are focusable; Enter toggles.
+- Hovering a stat (mouse) or tapping it (touch) shows a one-line description of what the stat measures and how the player's value is built from the CSV's real numbers, each with its percentile where the CSV has one. In the **Bars** view the trigger is the stat row; in the **Radar** view it's the stat's label pill (HP opens below its label, the others above, so the breakdown stays on the card). Tapping the same stat again, tapping elsewhere, or Escape closes it. Keyboard: the triggers are focusable; Enter toggles.
 - Inputs per stat:
   - **HP:** games played, total minutes (`pctile_min`).
   - **Attack:** points per game (`pctile_ppg`), 2-point FG% (`pctile_fg2_pct`).
@@ -163,6 +163,7 @@ Done when: neighbors are visible on both sides at 390×844 and desktop, the focu
 - Rotation animates smoothly (about 300–400 ms ease-out).
 - Under `prefers-reduced-motion`, rotation is instant (no animation).
 - Rotation angle lives in a single constant so it's easy to change.
+- The logo gets a contrast boost (`contrast(1.6)`) so its lines read as lines. In dark mode it's inverted to faint light lines.
 
 Done when: ten "next" swipes leave the logo at 200°, and foreground content stays readable over the logo.
 
@@ -179,7 +180,7 @@ Done when: ten "next" swipes leave the logo at 200°, and foreground content sta
 - While a search is active, the UI shows it clearly, e.g. a chip `Filtered: "lakers" ✕` that clears the search.
 - If nothing matches, show a "No matches" message with a way to clear the search.
 
-Done when: searching by each of player, Pokémon, main team, and other team narrows the deck correctly; clearing restores the full deck.
+Done when: searching by each of player, Pokémon, Pokémon type, main team, and other team narrows the deck correctly; clearing restores the full deck.
 
 ### F6 — Sort
 
@@ -200,6 +201,29 @@ Done when: searching by each of player, Pokémon, main team, and other team narr
 - The current entry, search, and sort are reflected in the URL, e.g. `#/player/203932?q=lakers&sort=team`, so a shared link reproduces the view. Defaults are omitted from the URL. Unknown player IDs or sort values fall back to defaults.
 
 Done when: reloading or opening a shared URL restores the same entry, search, and sort.
+
+### F8 — Manual adjustment notice
+
+- A player with any non-zero `*_diff` value (see "Manual adjustment columns") shows a small **✎ Adjusted** chip in the top-right corner of the headshot.
+- Hovering or tapping it lists each changed stat (e.g. `SPD +20`, `ATK −5`) and the BST change, noting that the stats shown already include them. It opens and closes like the stat breakdowns (F1c).
+- The chip takes no space in the card layout.
+
+### F9 — Dark mode
+
+- Light and dark themes. The theme follows the device setting (`prefers-color-scheme`) until the visitor picks one with the ☾ / ☀ button in the header; that choice is remembered per browser.
+- The theme is applied before first paint (a small inline script in `index.html`), so dark mode never flashes light.
+- See "Themes" under Visual design.
+
+### F10 — Footer and About
+
+- A footer under the deck holds an **About** button and the notice: "**Unofficial fan project.** NBA Pokédex is not affiliated with Nintendo, Game Freak, Creatures Inc., The Pokémon Company, the National Basketball Association, or any NBA team."
+- **About** opens a modal dialog (native `<dialog>`; closes with ✕, Escape, or a click outside; arrow keys inside it don't navigate the deck) with:
+  - What the app does (Gen 1–7 matches from real NBA statistics) and the @nbapokedex socials (Instagram, TikTok, YouTube).
+  - Each stat: its one-line description (the same text as the F1c breakdown) and its inputs with weights — HP: total minutes 100%. Attack: points per game 50%, 2-point FG% 50%. Defense: interior defensive FG% 50%, rebounds 30%, blocks 20%. Special Attack: assists − turnovers 33%, 3-pointers made 33%, net offensive rating 33%. Special Defense: perimeter defensive FG% 50%, net defensive rating 30%, steals 20%. Speed: average game speed 30%, loose balls recovered 30%, charges taken 30%, box outs 10%.
+  - **Adjustments:** why some stat lines were adjusted by hand, pointing to the Adjusted notice (F8).
+  - **Drawbacks:** known limits of the algorithm.
+  - Contact: nbapokedex@gmail.com.
+- The footer fits within the page without causing vertical scrolling at 390×844.
 
 ## Visual design
 
@@ -229,6 +253,12 @@ Where the two sides need their own colors (radar shapes and legend):
 
 - **Font:** Courier Prime (SIL Open Font License), self-hosted from `public/fonts/` with its license file. No runtime font requests.
 - **Card:** keeps the faded team-color tint (F1b).
+
+### Themes
+
+- Colors are CSS custom properties defined once in `src/index.css`; dark mode overrides them under `:root[data-theme='dark']` (dark graph paper, dark surfaces, light text, lighter focus ring and gauge green). Stat colors and type colors are the same in both themes.
+- In dark mode, very dark team colors (navy, black) are lightened, keeping their hue, wherever the color itself is the mark: the radar shape and legend dot, the stripe under the headshot, and the team dot. Card tints are unchanged.
+- Text meets WCAG AA contrast in both themes, including over the background logo and the radar shapes (the radar's scale numbers have a halo in the card color).
 
 ## Future backend readiness
 
@@ -289,15 +319,17 @@ These may come later; the code should not prevent them, but don't build toward t
 ## Constraints
 
 - Works on current mobile Safari and Chrome, and desktop Chrome, Firefox, and Safari.
-- First load is light: the CSV is under 100 KB, and the JS bundle should stay small (target under 150 KB gzipped).
+- First load is light: the CSV should stay under about 150 KB (about 50 KB compressed in transfer; the 2025–26 file is 132 KB), and the JS bundle should stay small (target under 150 KB gzipped).
 - Accessible: real buttons for navigation, alt text on all images (`"{name} headshot"`, `"{Pokémon} artwork"`), visible focus states, sufficient contrast over the logo.
 
 ## Open questions
 
 Decide these before or during planning:
 
-1. **Visual direction:** match the @nbapokedex social posts. Decided so far (see "Visual design"): stat colors, both chart views with a toggle, player/Pokémon colors, Courier Prime, team tint kept. Background: light gray graph paper (40px grid, 200px major lines with nodes), replacing the posts' cream. Match-quality gauge done. Faded player photo and sprite-in-ring: not now.
-2. **Hosting:** Vercel or Netlify (recommended, since both can host a backend later), or GitHub Pages? Custom domain?
-3. **Image hosting:** keep hot-linking NBA and PokéAPI images, or download and serve them myself for reliability?
+1. **Hosting:** Vercel or Netlify (recommended, since both can host a backend later), or GitHub Pages? Not decided yet. A custom domain is likely.
 
-Resolved: entry order (Pokémon ID by default, user-selectable via F6); deep links (yes, see F7).
+Resolved:
+- Entry order: Pokémon ID by default, user-selectable via F6.
+- Deep links: yes, see F7.
+- Visual direction: matches the @nbapokedex social posts (see "Visual design"): stat colors, both chart views with a toggle, player/Pokémon colors, Courier Prime, team tint, light gray graph paper (40px grid, 200px major lines with nodes) instead of the posts' cream, match-quality gauge, and dark mode. The faded player photo and sprite-in-ring are not planned.
+- Image hosting: keep hot-linking NBA and PokéAPI images (see "Images").
