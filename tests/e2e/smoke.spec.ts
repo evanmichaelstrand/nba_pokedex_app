@@ -1,11 +1,43 @@
-import { expect, test } from '@playwright/test'
+import { expect, test, type Page } from '@playwright/test'
+import { fileURLToPath } from 'node:url'
 
 const CSV = '**/data/*.csv'
+const EDGE_FIXTURE = fileURLToPath(new URL('./fixtures/edge.csv', import.meta.url))
 
-test('app loads entries', async ({ page }) => {
+const card = (page: Page) => page.getByRole('article')
+
+test('app loads and shows an entry', async ({ page }) => {
   await page.goto('/')
   await expect(page.getByRole('heading', { name: 'NBA Pokédex' })).toBeVisible()
-  await expect(page.getByText(/\d+ entries loaded/)).toBeVisible()
+  await expect(card(page)).toBeVisible()
+  await expect(card(page).getByText(/^\d+%$/)).toBeVisible()
+  await expect(card(page).getByRole('listitem')).toHaveCount(6)
+})
+
+test('entry fits one viewport without vertical scrolling', async ({ page }) => {
+  await page.goto('/')
+  await expect(card(page)).toBeVisible()
+  const overflow = await page.evaluate(() => document.documentElement.scrollHeight - window.innerHeight)
+  expect(overflow).toBeLessThanOrEqual(0)
+})
+
+test('renders other teams, single types, and form IDs cleanly', async ({ page }) => {
+  await page.route(CSV, (route) => route.fulfill({ path: EDGE_FIXTURE }))
+  await page.goto('/')
+  const entry = card(page)
+  await expect(entry.getByRole('heading', { name: 'Edge Case Player' })).toBeVisible()
+  await expect(entry.getByText('Denver Nuggets')).toBeVisible()
+  await expect(entry.getByText('Also played for: Cleveland Cavaliers, Boston Celtics')).toBeVisible()
+  await expect(entry.getByRole('heading', { name: 'Mega Tyranitar' })).toBeVisible()
+  await expect(entry.getByText('Rock', { exact: true })).toBeVisible()
+  await expect(entry.getByText(/^#\d+$/)).toHaveCount(0)
+})
+
+test('failed images fall back to a placeholder', async ({ page }) => {
+  await page.route('https://cdn.nba.com/**', (route) => route.fulfill({ status: 404 }))
+  await page.goto('/')
+  const headshot = card(page).getByAltText(/headshot$/)
+  await expect(headshot).toHaveAttribute('src', /^data:image\/svg\+xml/)
 })
 
 test('shows a loading state while the data downloads', async ({ page }) => {
@@ -18,7 +50,7 @@ test('shows a loading state while the data downloads', async ({ page }) => {
   await page.goto('/')
   await expect(page.getByRole('status')).toHaveText(/Loading/)
   release()
-  await expect(page.getByText(/\d+ entries loaded/)).toBeVisible()
+  await expect(card(page)).toBeVisible()
 })
 
 test('shows a friendly error and recovers on retry', async ({ page }) => {
@@ -29,7 +61,7 @@ test('shows a friendly error and recovers on retry', async ({ page }) => {
 
   fail = false
   await page.getByRole('button', { name: 'Try again' }).click()
-  await expect(page.getByText(/\d+ entries loaded/)).toBeVisible()
+  await expect(card(page)).toBeVisible()
 })
 
 test('shows an error for a malformed file', async ({ page }) => {
