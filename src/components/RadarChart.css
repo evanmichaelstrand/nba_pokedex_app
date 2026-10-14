@@ -107,3 +107,13 @@
   transform: translateY(-50%);
   pointer-events: none;
 }
+
+/* Dark mode: very dark team colors (navy, black) are lightened to stay visible, keeping their hue. */
+:root[data-theme='dark'] .radar-key::before {
+  background: oklch(from var(--key) max(l, 0.62) c h);
+}
+
+:root[data-theme='dark'] .radar-shape {
+  fill: oklch(from var(--shape) max(l, 0.62) c h);
+  stroke: oklch(from var(--shape) max(l, 0.62) c h);
+}

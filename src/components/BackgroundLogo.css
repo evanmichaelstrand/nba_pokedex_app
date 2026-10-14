@@ -12,6 +12,8 @@
   width: min(110vmin, 900px);
   height: auto;
   opacity: 0.12;
+  /* Firm up the JPG's soft gray strokes so the mark reads as lines, not a smudge. */
+  filter: contrast(1.6);
   /* The JPG has a white background; multiply drops it out against the page color. */
   mix-blend-mode: multiply;
   /* Clip to a circle just outside the logo ring so the JPG square never shows an edge. */
@@ -19,6 +21,13 @@
   mask-image: radial-gradient(closest-side, #000 70%, transparent 72%);
   transition: transform 350ms ease-out;
   will-change: transform;
+}
+
+/* Dark mode: light lines on the dark page. Inverted, the white background turns black, which screen drops out. */
+:root[data-theme='dark'] .background-logo-image {
+  opacity: 0.1;
+  filter: invert(1) contrast(1.6);
+  mix-blend-mode: screen;
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -89,6 +89,22 @@
   background: var(--color-bg);
 }
 
+/* Dark mode: set as data-theme on <html> (device setting by default, or the header toggle). */
+:root[data-theme='dark'] {
+  --color-bg: #15171b;
+  --grid-minor: rgb(200 210 230 / 0.045);
+  --grid-major: rgb(200 210 230 / 0.09);
+  --grid-node: rgb(200 210 230 / 0.22);
+  --color-surface: #22252b;
+  --color-text: #ececea;
+  --color-text-muted: #a4a7ad;
+  --color-border: #383c44;
+  --color-focus: #6aa5ff;
+  --color-match: #6cbf3a;
+
+  color-scheme: dark;
+}
+
 *,
 *::before,
 *::after {

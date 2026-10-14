@@ -10,6 +10,7 @@ import {
   shortPlayerName,
 } from '../../src/lib/format'
 import { PLACEHOLDER_IMAGE_URL, pokemonArtworkUrl } from '../../src/lib/images'
+import { resolveTheme } from '../../src/lib/theme'
 
 describe('getTeam', () => {
   it('looks up known teams case-insensitively', () => {
@@ -115,5 +116,18 @@ describe('shortPlayerName', () => {
     ['  LeBron   James ', 'James'],
   ])('%s → %s', (name, expected) => {
     expect(shortPlayerName(name)).toBe(expected)
+  })
+})
+
+describe('resolveTheme', () => {
+  it('uses an explicit stored choice over the device setting', () => {
+    expect(resolveTheme('light', true)).toBe('light')
+    expect(resolveTheme('dark', false)).toBe('dark')
+  })
+
+  it('follows the device when nothing valid is stored', () => {
+    expect(resolveTheme(null, true)).toBe('dark')
+    expect(resolveTheme(null, false)).toBe('light')
+    expect(resolveTheme('sepia', true)).toBe('dark')
   })
 })

@@ -7,6 +7,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="description" content="Every NBA player matched to a Pokémon by stat profile." />
     <title>NBA Pokédex</title>
+    <script>
+      // Apply the theme before first paint (no light flash in dark mode). Mirrors src/lib/theme.ts.
+      try {
+        var stored = localStorage.getItem('nbaPokedex.theme')
+        document.documentElement.dataset.theme =
+          stored === 'light' || stored === 'dark' ? stored : matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+      } catch (e) {}
+    </script>
   </head>
   <body>
     <div id="root"></div>

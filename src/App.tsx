@@ -3,6 +3,7 @@ import { Pokedex } from './components/Pokedex'
 import { SearchBar } from './components/SearchBar'
 import { SortSelect } from './components/SortSelect'
 import { ErrorMessage, LoadingMessage } from './components/StatusMessage'
+import { ThemeToggle } from './components/ThemeToggle'
 import { SEASON } from './config'
 import { useEntries } from './hooks/useEntries'
 import { useHashView } from './hooks/useHashView'
@@ -41,6 +42,7 @@ export default function App() {
             <SortSelect value={sort} options={sortOptions} onChange={setSortChoice} />
           </>
         )}
+        <ThemeToggle />
       </header>
       <main className="app-main">
         {state.status === 'loading' && <LoadingMessage />}

@@ -1,0 +1,21 @@
+.theme-toggle {
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+/* Alone in the header (while loading, or on error): still pinned to the right. */
+.app-title-block + .theme-toggle {
+  margin-left: auto;
+}

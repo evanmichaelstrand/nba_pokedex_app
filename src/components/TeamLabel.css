@@ -27,3 +27,8 @@
   border-radius: 50%;
   background: var(--team-color);
 }
+
+/* Dark mode: very dark team colors (navy, black) are lightened to stay visible, keeping their hue. */
+:root[data-theme='dark'] .team-label-dot {
+  background: oklch(from var(--team-color) max(l, 0.62) c h);
+}

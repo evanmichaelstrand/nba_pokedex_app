@@ -22,6 +22,11 @@
   color: var(--color-text-muted);
 }
 
+/* Empty: no clear button, so give its space to the placeholder (narrow phone headers). */
+.search-input:placeholder-shown {
+  padding-right: var(--space-2);
+}
+
 /* We draw our own clear button. */
 .search-input::-webkit-search-cancel-button {
   appearance: none;

@@ -1,4 +1,4 @@
-import { Fragment, type CSSProperties } from 'react'
+import type { CSSProperties } from 'react'
 import { SEASON } from '../config'
 import type { Entry } from '../data'
 import type { ChartMode } from '../hooks/useChartMode'
@@ -61,13 +61,10 @@ export function EntryCard({
             <TeamLabel abbreviation={player.mainTeam} />
           </p>
           {player.otherTeams.length > 0 && (
-            <p className="entry-detail">
-              Also played for:{' '}
-              {player.otherTeams.map((abbr, i) => (
-                <Fragment key={abbr}>
-                  {i > 0 && ', '}
-                  <TeamLabel abbreviation={abbr} size="small" />
-                </Fragment>
+            <p className="entry-detail entry-other-teams">
+              <span className="visually-hidden">Also played for: </span>
+              {player.otherTeams.map((abbr) => (
+                <TeamLabel key={abbr} abbreviation={abbr} size="small" />
               ))}
             </p>
           )}

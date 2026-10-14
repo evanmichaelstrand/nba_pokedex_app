@@ -56,9 +56,11 @@ test('renders other teams, single types, and form IDs cleanly', async ({ page })
   const narrow = (page.viewportSize()?.width ?? 0) < 640
   await expect(entry.getByRole('heading', { name: 'Edge Case Player' })).toBeVisible()
   await expect(entry.getByText(narrow ? 'Nuggets' : 'Denver Nuggets', { exact: true })).toBeVisible()
-  await expect(
-    entry.getByText(`Also played for: ${narrow ? 'Cavaliers, Celtics' : 'Cleveland Cavaliers, Boston Celtics'}`),
-  ).toBeVisible()
+  // Other teams are listed (muted) without a visible "Also played for" prefix; screen readers still hear it.
+  const otherTeams = entry.locator('.entry-other-teams')
+  await expect(otherTeams).toHaveText(`Also played for: ${narrow ? 'CavaliersCeltics' : 'Cleveland CavaliersBoston Celtics'}`)
+  await expect(otherTeams.getByText(narrow ? 'Cavaliers' : 'Cleveland Cavaliers', { exact: true })).toBeVisible()
+  await expect(otherTeams.getByText(narrow ? 'Celtics' : 'Boston Celtics', { exact: true })).toBeVisible()
   await expect(entry.getByRole('heading', { name: 'Mega Tyranitar' })).toBeVisible()
   await expect(entry.getByText('Rock', { exact: true })).toBeVisible()
   await expect(entry.getByText(/^#\d+$/)).toHaveCount(0)

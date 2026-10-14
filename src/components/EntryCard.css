@@ -75,6 +75,14 @@
   color: var(--color-text-muted);
 }
 
+/* Other teams this season: muted, below the main team. */
+.entry-other-teams {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0 var(--space-2);
+}
+
 .entry-pokemon-meta {
   display: flex;
   flex-wrap: wrap;
@@ -83,4 +91,7 @@
   gap: var(--space-1);
 }
 
-
+/* Dark mode: very dark team colors (navy, black) are lightened to stay visible, keeping their hue. */
+:root[data-theme='dark'] .entry-image-frame-player {
+  border-bottom-color: oklch(from var(--team-color) max(l, 0.62) c h);
+}
