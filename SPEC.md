@@ -16,7 +16,7 @@ This app is a front end for an existing pipeline (different directory). It does 
 1. Visitor opens the site and sees the first Pokédex entry.
 2. Visitor swipes left/right (or uses arrow keys / on-screen arrows) to move between entries.
 3. On every move, the background logo rotates and the next entry appears.
-4. Visitor can optionally search (by player, Pokémon, or team name) to narrow the deck, and change the sort order (see F5, F6).
+4. Visitor can optionally search (by player, Pokémon, Pokémon type, or team name) to narrow the deck, and change the sort order (see F5, F6).
 
 That's the whole app. Every decision should serve this loop feeling fast and fun.
 
@@ -174,7 +174,7 @@ Done when: ten "next" swipes leave the logo at 200°, and foreground content sta
 
 ### F5 — Search / filter
 
-- One search box. Case-insensitive partial match against: player name, Pokémon display name (e.g. "mega tyranitar"), and team full name or abbreviation for **both** `main_team` and `other_teams`.
+- One search box. Case-insensitive partial match against: player name, Pokémon display name (e.g. "mega tyranitar"), Pokémon type (primary or secondary, e.g. "dark"), and team full name or abbreviation for **both** `main_team` and `other_teams`.
 - Search narrows the swipe deck; navigation (swipe, keys, buttons, wraparound) works within the filtered deck.
 - While a search is active, the UI shows it clearly, e.g. a chip `Filtered: "lakers" ✕` that clears the search.
 - If nothing matches, show a "No matches" message with a way to clear the search.
@@ -183,12 +183,15 @@ Done when: searching by each of player, Pokémon, main team, and other team narr
 
 ### F6 — Sort
 
-- Sort options: **Pokémon ID** (default), **NBA team**, **Player BST**, **Pokémon BST**, **Position**.
+- Sort options: **Pokémon ID** (default), **Player name**, **Pokémon name**, **NBA team**, **Match quality**, **Player BST**, **Pokémon BST**, **Position**.
   - **Pokémon ID:** ascending.
+  - **Player name:** by surname (the same surname the charts show: suffixes like "Jr." ignored, lowercase particles like "da" kept), then full name.
+  - **Pokémon name:** by display name, A–Z ("Mega Tyranitar" sorts under M).
+  - **Match quality:** by `match_percentage`, **highest first**, then Pokémon ID.
   - **NBA team:** by `main_team` full name (Atlanta Hawks → Washington Wizards); unknown abbreviations sort by the abbreviation; ties by Pokémon ID.
   - **Player BST / Pokémon BST:** by `base_stat_total` / `pokemon_base_stat_total`, **highest first**, then Pokémon ID.
   - **Position:** by position, then Pokémon ID. **Only shown when at least one entry has a position**, so it appears automatically once the pipeline adds the column.
-- Fixed direction per option (BST highest first, others ascending); no reverse toggle.
+- Fixed direction per option (match quality and BST highest first, others ascending); no reverse toggle.
 
 ### F7 — Deck changes and URL state
 

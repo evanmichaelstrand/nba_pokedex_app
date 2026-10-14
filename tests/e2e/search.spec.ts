@@ -36,6 +36,15 @@ test('searches main teams by name and other teams by abbreviation', async ({ pag
   await expect(playerName(page)).toHaveText('Traded Guy')
 })
 
+test('searches Pokémon types, primary or secondary', async ({ page }) => {
+  await search(page).fill('dark') // Mega Tyranitar is rock/dark
+  await expect(playerName(page)).toHaveText('Traded Guy')
+  await expect(position(page)).toHaveText(at(1, 1))
+  await search(page).fill('Electric')
+  await expect(playerName(page)).toHaveText('Another Laker')
+  await expect(position(page)).toHaveText(at(1, 1))
+})
+
 test('navigation stays within the filtered deck', async ({ page }) => {
   await search(page).fill('lakers')
   await page.getByRole('button', { name: 'Next entry' }).click()

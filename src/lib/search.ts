@@ -1,5 +1,5 @@
 import type { Entry } from '../data'
-import { formatPokemonName } from './format'
+import { formatPokemonName, formatTypeName } from './format'
 import { getTeam } from './teams'
 
 /** Lowercase and strip accents, so "jokic" finds "Jokić" and "pokemon" finds "Pokémon". */
@@ -9,12 +9,13 @@ export function normalizeText(text: string): string {
 
 function searchableText(entry: Entry): string {
   const teams = [entry.player.mainTeam, ...entry.player.otherTeams].flatMap((abbr) => [abbr, getTeam(abbr).name])
-  return normalizeText([entry.player.name, formatPokemonName(entry.pokemon.name), ...teams].join(' | '))
+  const types = [entry.pokemon.primaryType, entry.pokemon.secondaryType].filter((t) => t !== undefined).map(formatTypeName)
+  return normalizeText([entry.player.name, formatPokemonName(entry.pokemon.name), ...types, ...teams].join(' | '))
 }
 
 /**
  * True when every word of the query appears somewhere in the entry's player name, Pokémon name,
- * or team names/abbreviations (main and other teams). An empty query matches everything.
+ * Pokémon types, or team names/abbreviations (main and other teams). An empty query matches everything.
  */
 export function matchesQuery(entry: Entry, query: string): boolean {
   const words = normalizeText(query).split(/\s+/).filter(Boolean)

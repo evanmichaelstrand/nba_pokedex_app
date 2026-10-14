@@ -54,6 +54,40 @@ describe('sortEntries', () => {
     expect(ids(sortEntries(input, 'pokemonBst'))).toEqual([1, 3, 2])
   })
 
+  it('sorts by player surname, then full name; suffixes and particles are handled', () => {
+    const named = (id: number, name: string): Entry => {
+      const e = entry({ id, pokemonId: id })
+      return { ...e, player: { ...e.player, name } }
+    }
+    const input = [
+      named(1, 'Nikola Jokić'),
+      named(2, 'Jaren Jackson Jr.'), // Jackson
+      named(3, 'Gui da Silva'), // "da Silva" sorts under D
+      named(4, 'Anthony Edwards'),
+      named(5, 'Jalen Jackson'),
+    ]
+    expect(ids(sortEntries(input, 'playerName'))).toEqual([3, 4, 5, 2, 1])
+  })
+
+  it('sorts by Pokémon display name', () => {
+    const pokemon = (id: number, name: string): Entry => {
+      const e = entry({ id, pokemonId: id })
+      return { ...e, pokemon: { ...e.pokemon, name } }
+    }
+    const input = [pokemon(1, 'snorlax'), pokemon(2, 'tyranitar-mega'), pokemon(3, 'abra')]
+    // "Mega Tyranitar" sorts under M.
+    expect(ids(sortEntries(input, 'pokemonName'))).toEqual([3, 2, 1])
+  })
+
+  it('sorts by match quality, highest first, then Pokémon ID', () => {
+    const match = (id: number, pokemonId: number, matchPercentage: number): Entry => ({
+      ...entry({ id, pokemonId }),
+      matchPercentage,
+    })
+    const input = [match(1, 5, 0.8), match(2, 9, 0.95), match(3, 1, 0.8)]
+    expect(ids(sortEntries(input, 'match'))).toEqual([2, 3, 1])
+  })
+
   it('sorts by position with missing positions last', () => {
     const input = [
       entry({ id: 1, pokemonId: 1 }),
@@ -67,7 +101,15 @@ describe('sortEntries', () => {
 
 describe('availableSortKeys', () => {
   it('hides Position until some entry has one', () => {
-    expect(availableSortKeys([entry({ id: 1, pokemonId: 1 })])).toEqual(['pokemonId', 'team', 'playerBst', 'pokemonBst'])
+    expect(availableSortKeys([entry({ id: 1, pokemonId: 1 })])).toEqual([
+      'pokemonId',
+      'playerName',
+      'pokemonName',
+      'team',
+      'match',
+      'playerBst',
+      'pokemonBst',
+    ])
     expect(availableSortKeys([entry({ id: 1, pokemonId: 1, position: 'G' })])).toContain('position')
   })
 })

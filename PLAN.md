@@ -41,6 +41,7 @@ Work one item at a time; check it off and commit when done (lint, unit tests, an
   - [x] "Adjusted" notice for players with manual stat changes (`*_diff` columns)
   - [x] Footer with non-affiliation notice
   - [x] About dialog: how each stat is built (inputs and weights), contact email
+  - [x] Sort by player surname, Pokémon name, and match quality; search by Pokémon type
 - [ ] 12. **Visual design pass** (match the @nbapokedex posts)
   - [x] Stat colors, butterfly + radar charts with toggle, player/Pokémon series colors, Courier Prime font
   - [x] Graph-paper background, match-quality gauge, surnames in charts (faded player photo and sprite-in-ring deferred)

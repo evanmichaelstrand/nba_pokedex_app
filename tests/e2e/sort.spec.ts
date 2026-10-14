@@ -74,9 +74,44 @@ test('sorts by Pokémon BST, highest first', async ({ page }) => {
   expect(await deckOrder(page)).toEqual(['Traded Guy', 'Another Laker', 'Nikola Jokić', 'LeBron James'])
 })
 
+test('sorts by player surname', async ({ page }) => {
+  await load(page, fixture)
+  await sortSelect(page).selectOption('playerName')
+  // Guy, James, Jokić, Laker.
+  expect(await deckOrder(page)).toEqual(['Traded Guy', 'LeBron James', 'Nikola Jokić', 'Another Laker'])
+})
+
+test('sorts by Pokémon name', async ({ page }) => {
+  await load(page, fixture)
+  await sortSelect(page).selectOption('pokemonName')
+  // Beartic, Mega Tyranitar, Pikachu, Snorlax.
+  expect(await deckOrder(page)).toEqual(['LeBron James', 'Traded Guy', 'Another Laker', 'Nikola Jokić'])
+})
+
+test('sorts by match quality, highest first', async ({ page }) => {
+  const [header, ...rows] = fixture.trim().split('\n')
+  const column = header.split(',').indexOf('match_percentage')
+  const matches = ['0.71', '0.93', '0.85', '0.6'] // Jokić, LeBron, Traded Guy, Another Laker
+  const csv = [
+    header,
+    ...rows.map((row, i) => row.split(',').map((cell, c) => (c === column ? matches[i] : cell)).join(',')),
+  ].join('\n')
+  await load(page, csv)
+  await sortSelect(page).selectOption('match')
+  expect(await deckOrder(page)).toEqual(['LeBron James', 'Traded Guy', 'Nikola Jokić', 'Another Laker'])
+})
+
 test('hides Position until the data has positions', async ({ page }) => {
   await load(page, fixture)
-  await expect(sortSelect(page).locator('option')).toHaveText(['Pokémon ID', 'NBA team', 'Player BST', 'Pokémon BST'])
+  await expect(sortSelect(page).locator('option')).toHaveText([
+    'Pokémon ID',
+    'Player name',
+    'Pokémon name',
+    'NBA team',
+    'Match quality',
+    'Player BST',
+    'Pokémon BST',
+  ])
 })
 
 test('sorts by position once the column exists', async ({ page }) => {

@@ -44,6 +44,14 @@ describe('matchesQuery', () => {
     expect(matchesQuery(traded, 'cle')).toBe(true)
   })
 
+  it('matches Pokémon types, primary or secondary', () => {
+    const dual: Entry = { ...jokic, pokemon: { ...jokic.pokemon, primaryType: 'fighting', secondaryType: 'psychic' } }
+    expect(matchesQuery(jokic, 'water')).toBe(true)
+    expect(matchesQuery(dual, 'Fighting')).toBe(true)
+    expect(matchesQuery(dual, 'psychic')).toBe(true)
+    expect(matchesQuery(dual, 'water')).toBe(false)
+  })
+
   it('requires every word to match somewhere', () => {
     expect(matchesQuery(jokic, 'nikola nuggets')).toBe(true)
     expect(matchesQuery(jokic, 'nikola lakers')).toBe(false)

@@ -1,13 +1,25 @@
 import type { Entry } from '../data'
+import { formatPokemonName, shortPlayerName } from './format'
 import { getTeam } from './teams'
 
-export type SortKey = 'pokemonId' | 'team' | 'playerBst' | 'pokemonBst' | 'position'
+export type SortKey =
+  | 'pokemonId'
+  | 'playerName'
+  | 'pokemonName'
+  | 'team'
+  | 'match'
+  | 'playerBst'
+  | 'pokemonBst'
+  | 'position'
 
 export const DEFAULT_SORT: SortKey = 'pokemonId'
 
 export const SORT_LABELS: Readonly<Record<SortKey, string>> = {
   pokemonId: 'Pokémon ID',
+  playerName: 'Player name',
+  pokemonName: 'Pokémon name',
   team: 'NBA team',
+  match: 'Match quality',
   playerBst: 'Player BST',
   pokemonBst: 'Pokémon BST',
   position: 'Position',
@@ -34,9 +46,17 @@ function optionalText(a: string | undefined, b: string | undefined): number {
 
 const COMPARATORS: Readonly<Record<SortKey, (a: Entry, b: Entry) => number>> = {
   pokemonId: byPokemonId,
+  // By surname (as shown in the charts), then full name.
+  playerName: (a, b) =>
+    text(shortPlayerName(a.player.name), shortPlayerName(b.player.name)) ||
+    text(a.player.name, b.player.name) ||
+    byPokemonId(a, b),
+  // By display name, so "Mega Tyranitar" sorts under M.
+  pokemonName: (a, b) => text(formatPokemonName(a.pokemon.name), formatPokemonName(b.pokemon.name)) || byPokemonId(a, b),
   // By full team name; unknown abbreviations fall back to the abbreviation itself.
   team: (a, b) => text(getTeam(a.player.mainTeam).name, getTeam(b.player.mainTeam).name) || byPokemonId(a, b),
-  // Base stat totals sort highest first.
+  // Match quality and base stat totals sort highest first.
+  match: (a, b) => b.matchPercentage - a.matchPercentage || byPokemonId(a, b),
   playerBst: (a, b) => b.player.baseStatTotal - a.player.baseStatTotal || byPokemonId(a, b),
   pokemonBst: (a, b) => b.pokemon.baseStatTotal - a.pokemon.baseStatTotal || byPokemonId(a, b),
   position: (a, b) => optionalText(a.player.position, b.player.position) || byPokemonId(a, b),
