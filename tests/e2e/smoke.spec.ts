@@ -58,6 +58,37 @@ test('renders other teams, single types, and form IDs cleanly', async ({ page })
   await expect(entry.getByText(/^#\d+$/)).toHaveCount(0)
 })
 
+test('header states the season', async ({ page }) => {
+  await page.goto('/')
+  await expect(page.getByRole('banner').getByText(/^\d{4}–\d{2} Regular Season$/)).toBeVisible()
+})
+
+test('headshots prefer the season photo and fall back to the latest one', async ({ page }) => {
+  const png = Buffer.from(
+    'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=',
+    'base64',
+  )
+  // Season photos are refused (as NBA.com does for a missing season); the latest photo works.
+  await page.route('https://cdn.nba.com/headshots/**', (route) =>
+    route.request().url().includes('/latest/')
+      ? route.fulfill({ body: png, contentType: 'image/png' })
+      : route.fulfill({ status: 403 }),
+  )
+  await page.goto('/')
+  await expect(card(page).getByAltText(/headshot$/)).toHaveAttribute('src', /\/headshots\/nba\/latest\//)
+})
+
+test('season headshots are tried first', async ({ page }) => {
+  const requested: string[] = []
+  await page.route('https://cdn.nba.com/headshots/**', (route) => {
+    requested.push(route.request().url())
+    return route.fulfill({ status: 403 })
+  })
+  await page.goto('/')
+  await expect(card(page).getByAltText(/headshot$/)).toHaveAttribute('src', /^data:/)
+  expect(requested.some((url) => /\/headshots\/nba\/\d+\/\d{4}\/1040x760\//.test(url))).toBe(true)
+})
+
 test('failed images fall back to a placeholder', async ({ page }) => {
   await page.route('https://cdn.nba.com/**', (route) => route.fulfill({ status: 404 }))
   await page.goto('/')

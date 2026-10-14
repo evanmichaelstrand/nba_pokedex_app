@@ -1,7 +1,8 @@
 import type { CSSProperties } from 'react'
+import { SEASON } from '../config'
 import type { Entry } from '../data'
 import { formatDexNumber, formatMatchPercent, formatPokemonName } from '../lib/format'
-import { playerHeadshotUrl, pokemonArtworkUrl } from '../lib/images'
+import { playerHeadshotUrls, pokemonArtworkUrl } from '../lib/images'
 import { getTeam } from '../lib/teams'
 import { FallbackImage } from './FallbackImage'
 import { StatBars } from './StatBars'
@@ -27,7 +28,7 @@ export function EntryCard({ entry, statScaleMax }: EntryCardProps) {
           <div className="entry-image-frame entry-image-frame-player">
             <FallbackImage
               className="entry-image"
-              src={playerHeadshotUrl(entry.id)}
+              sources={playerHeadshotUrls(entry.id, [player.mainTeam, ...player.otherTeams], SEASON?.startYear ?? null)}
               alt={`${player.name} headshot`}
               width={1040}
               height={760}
@@ -42,7 +43,7 @@ export function EntryCard({ entry, statScaleMax }: EntryCardProps) {
           <div className="entry-image-frame">
             <FallbackImage
               className="entry-image"
-              src={pokemonArtworkUrl(pokemon.id)}
+              sources={[pokemonArtworkUrl(pokemon.id)]}
               alt={`${pokemonName} artwork`}
               width={475}
               height={475}

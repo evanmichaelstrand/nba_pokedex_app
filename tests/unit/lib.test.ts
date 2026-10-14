@@ -8,11 +8,11 @@ import {
   formatPokemonName,
   formatTypeName,
 } from '../../src/lib/format'
-import { PLACEHOLDER_IMAGE_URL, playerHeadshotUrl, pokemonArtworkUrl } from '../../src/lib/images'
+import { PLACEHOLDER_IMAGE_URL, pokemonArtworkUrl } from '../../src/lib/images'
 
 describe('getTeam', () => {
   it('looks up known teams case-insensitively', () => {
-    expect(getTeam('DEN')).toEqual({ abbreviation: 'DEN', name: 'Denver Nuggets', color: '#0e2240' })
+    expect(getTeam('DEN')).toEqual({ abbreviation: 'DEN', name: 'Denver Nuggets', color: '#0e2240', id: 1610612743 })
     expect(getTeam('lal').name).toBe('Los Angeles Lakers')
   })
 
@@ -80,7 +80,6 @@ describe('other formatters', () => {
 
 describe('image URLs', () => {
   it('builds URLs by ID', () => {
-    expect(playerHeadshotUrl(2544)).toBe('https://cdn.nba.com/headshots/nba/latest/1040x760/2544.png')
     expect(pokemonArtworkUrl(10049)).toMatch(/official-artwork\/10049\.png$/)
   })
 

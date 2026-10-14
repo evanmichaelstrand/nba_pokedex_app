@@ -1,9 +1,25 @@
-export function playerHeadshotUrl(playerId: number): string {
-  return `https://cdn.nba.com/headshots/nba/latest/1040x760/${playerId}.png`
+import { getTeam } from './teams'
+
+const NBA_CDN = 'https://cdn.nba.com'
+const POKEAPI_SPRITES = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon'
+
+/**
+ * Headshot URLs to try in order: the season photo with each team the player played for (main team
+ * first), then NBA.com's latest photo. Without a season, only the latest photo is used.
+ */
+export function playerHeadshotUrls(playerId: number, teams: readonly string[], seasonStartYear: number | null): string[] {
+  const seasonal =
+    seasonStartYear === null
+      ? []
+      : teams.flatMap((abbr) => {
+          const teamId = getTeam(abbr).id
+          return teamId ? [`${NBA_CDN}/headshots/nba/${teamId}/${seasonStartYear}/1040x760/${playerId}.png`] : []
+        })
+  return [...seasonal, `${NBA_CDN}/headshots/nba/latest/1040x760/${playerId}.png`]
 }
 
 export function pokemonArtworkUrl(pokemonId: number): string {
-  return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemonId}.png`
+  return `${POKEAPI_SPRITES}/other/official-artwork/${pokemonId}.png`
 }
 
 /** Neutral silhouette shown when an image fails to load. Inline so it can never fail itself. */

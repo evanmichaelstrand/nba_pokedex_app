@@ -14,7 +14,7 @@ interface PeekCardProps {
 export function PeekCard({ entry, side }: PeekCardProps) {
   return (
     <div className="peek-card" data-side={side}>
-      <FallbackImage className="peek-image" src={pokemonArtworkUrl(entry.pokemon.id)} alt="" />
+      <FallbackImage className="peek-image" sources={[pokemonArtworkUrl(entry.pokemon.id)]} alt="" />
       <p className="peek-name">{entry.player.name}</p>
       <p className="peek-pokemon">{formatPokemonName(entry.pokemon.name)}</p>
     </div>

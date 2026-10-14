@@ -3,6 +3,7 @@ import { Pokedex } from './components/Pokedex'
 import { SearchBar } from './components/SearchBar'
 import { SortSelect } from './components/SortSelect'
 import { ErrorMessage, LoadingMessage } from './components/StatusMessage'
+import { SEASON } from './config'
 import { useEntries } from './hooks/useEntries'
 import { useHashView } from './hooks/useHashView'
 import { availableSortKeys, DEFAULT_SORT, type SortKey } from './lib/sort'
@@ -30,7 +31,10 @@ export default function App() {
     <div className="app">
       <header className="app-header">
         <img className="app-logo" src={`${import.meta.env.BASE_URL}logo-color.jpg`} alt="" />
-        <h1 className="app-title">NBA Pokédex</h1>
+        <div className="app-title-block">
+          <h1 className="app-title">NBA Pokédex</h1>
+          {SEASON && <p className="app-season">{SEASON.label}</p>}
+        </div>
         {entries && (
           <>
             <SearchBar query={query} onQueryChange={setQuery} />

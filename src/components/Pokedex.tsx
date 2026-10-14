@@ -1,10 +1,11 @@
 import { useMemo } from 'react'
+import { SEASON } from '../config'
 import type { Entry } from '../data'
 import { useArrowKeys } from '../hooks/useArrowKeys'
 import { useDeckNavigation } from '../hooks/useDeckNavigation'
 import { useWriteHash } from '../hooks/useHashView'
 import { usePreloadImages } from '../hooks/usePreloadImages'
-import { playerHeadshotUrl, pokemonArtworkUrl } from '../lib/images'
+import { playerHeadshotUrls, pokemonArtworkUrl } from '../lib/images'
 import { filterEntries } from '../lib/search'
 import { sortEntries, type SortKey } from '../lib/sort'
 import { statScaleMax } from '../lib/stats'
@@ -33,7 +34,12 @@ export function Pokedex({ entries, initialPlayerId, query, sort, onClearQuery }:
 
   // Warm the cache for everything the next few moves can bring into focus.
   const ahead = [1, -1, 2, -2, 3, -3].map((o) => deck[(((index + o) % deck.length) + deck.length) % deck.length])
-  usePreloadImages(ahead.flatMap((e) => (e ? [playerHeadshotUrl(e.id), pokemonArtworkUrl(e.pokemon.id)] : [])))
+  // (First choice of each image only; fallbacks are rare and load on demand.)
+  usePreloadImages(
+    ahead.flatMap((e) =>
+      e ? [playerHeadshotUrls(e.id, [e.player.mainTeam], SEASON?.startYear ?? null)[0], pokemonArtworkUrl(e.pokemon.id)] : [],
+    ),
+  )
 
   const filtered = query.trim() !== ''
   return (

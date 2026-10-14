@@ -73,9 +73,11 @@ Treat any blank value in these columns as "not available" and hide it rather tha
 
 ### Images
 
-- **Player headshot:** `https://cdn.nba.com/headshots/nba/latest/1040x760/{PLAYER_ID}.png`
-- **Pokémon art:** `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/{pokemon_id}.png`
-- Both are hot-linked by ID; no images are stored for players or Pokémon.
+- **Season:** the dataset season (e.g. `2025-26`) is configured via `VITE_SEASON` and shown in the header as "2025–26 Regular Season". It also selects season-specific headshots.
+- **Player headshot** (first that loads): the season photo with the main team `https://cdn.nba.com/headshots/nba/{TEAM_ID}/{SEASON_START_YEAR}/1040x760/{PLAYER_ID}.png`, then the season photo with each other team, then `https://cdn.nba.com/headshots/nba/latest/1040x760/{PLAYER_ID}.png`. `TEAM_ID` is NBA.com's numeric team ID from the static team table.
+- **Pokémon sprite** (first that loads): animated Showdown sprite `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/{pokemon_id}.gif`, then official artwork `…/sprites/pokemon/other/official-artwork/{pokemon_id}.png`. Under `prefers-reduced-motion`, use the static official artwork.
+- **Team logos:** `https://cdn.nba.com/logos/nba/{TEAM_ID}/primary/L/logo.svg`, shown next to team names (main and other teams). Unknown teams show no logo.
+- All are hot-linked by ID; no images are stored for players, Pokémon, or teams.
 - If an image fails to load, show a neutral silhouette placeholder. Never show a broken-image icon.
 - **Logo:** my nba_pokedex logo, stored in `public/` (`logo-bw.jpg` line art, `logo-color.jpg` full color).
 
@@ -106,6 +108,17 @@ Done when:
 - Default entry order: **by Pokémon ID, ascending** (sort in the app; the CSV is ordered by `PLAYER_ID`). Other orders are selectable via F6.
 
 Done when: all three input methods work, a short swipe (under a threshold) snaps back without navigating, and rapid repeated swipes don't skip or desync entries.
+
+### F1b — Card styling
+
+- The card background carries a faded tint of the player's main team color.
+
+### F2c — Progress slider
+
+- A slider under the navigation spans the current (filtered, sorted) deck and tracks the current position.
+- Dragging it flips through entries quickly; releasing leaves you on that entry. Arrow keys work on it when focused.
+- It's a quick way to flip through, not a replacement for search.
+- The logo rotates by the number of entries moved (20° per entry), so scrubbing spins it.
 
 ### F2b — 3D deck presentation
 
