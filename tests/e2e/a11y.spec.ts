@@ -22,8 +22,8 @@ test('the app is usable with the keyboard alone, with visible focus', async ({ p
   await expect(page.getByRole('article')).toBeVisible()
   const next = page.getByRole('button', { name: 'Next entry' })
 
-  // Tab until the Next button has focus (search, sort, and Previous come first).
-  for (let i = 0; i < 10 && !(await next.evaluate((el) => el === document.activeElement)); i++) {
+  // Tab until the Next button has focus (search, sort, chart toggle, stat rows, and Previous come first).
+  for (let i = 0; i < 30 && !(await next.evaluate((el) => el === document.activeElement)); i++) {
     await page.keyboard.press('Tab')
   }
   await expect(next).toBeFocused()
