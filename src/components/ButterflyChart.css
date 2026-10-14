@@ -46,10 +46,24 @@
   list-style: none;
 }
 
+.butterfly-item {
+  position: relative;
+}
+
 .butterfly-row {
   display: grid;
   grid-template-columns: 1fr 4.5rem 1fr;
   align-items: center;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.butterfly-row:hover .butterfly-label,
+.butterfly-row[aria-expanded='true'] .butterfly-label {
+  text-decoration: underline;
+  text-decoration-color: var(--bar);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
 }
 
 .butterfly-half {

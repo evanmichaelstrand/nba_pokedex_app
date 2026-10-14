@@ -1,4 +1,4 @@
-import type { StatLine } from '../data'
+import type { RealStats, StatLine } from '../data'
 import type { ChartMode } from '../hooks/useChartMode'
 import { ButterflyChart } from './ButterflyChart'
 import { RadarChart } from './RadarChart'
@@ -17,6 +17,8 @@ interface StatChartProps {
   playerColor: string
   pokemonColor: string
   scaleMax: number
+  /** The player's real numbers, for the bar chart's per-stat breakdowns. */
+  realStats: RealStats
 }
 
 const MODES: ReadonlyArray<{ mode: ChartMode; label: string }> = [

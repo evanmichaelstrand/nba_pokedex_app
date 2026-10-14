@@ -107,6 +107,7 @@ export function EntryCard({
         playerTotal={player.baseStatTotal}
         pokemonTotal={pokemon.baseStatTotal}
         scaleMax={statScaleMax}
+        realStats={entry.realStats}
       />
     </article>
   )

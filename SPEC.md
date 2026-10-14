@@ -115,6 +115,19 @@ Done when: all three input methods work, a short swipe (under a threshold) snaps
 
 - The card background carries a faded tint of the player's main team color.
 
+### F1c — Stat breakdowns (bar chart)
+
+- In the **Bars** view, hovering a stat row (mouse) or tapping it (touch) shows how the player's value is built from the CSV's real numbers, each with its percentile where the CSV has one. Tapping the same row again, tapping elsewhere, or Escape closes it. Keyboard: rows are focusable; Enter toggles.
+- Inputs per stat:
+  - **HP:** games played, total minutes (`pctile_min`).
+  - **Attack:** points per game (`pctile_ppg`), 2-point FG% (`pctile_fg2_pct`).
+  - **Defense:** interior defensive FG% (`pctile_interior_def_fg_pct`), rebounds (`pctile_reb`), blocks (`pctile_blk`).
+  - **Sp. Attack:** assists, turnovers, AST − TOV (`pctile_ast_minus_tov`; the CSV has one combined percentile), 3-pointers made per game (derived as `fg3_pct × fg3a`; `pctile_fg3m`), net offensive rating (`pctile_net_off_rating`).
+  - **Sp. Defense:** perimeter defensive FG% (`pctile_perimeter_def_fg_pct`), steals (`pctile_stl`), net defensive rating (`pctile_net_def_rating`).
+  - **Speed:** average speed (`pctile_avg_speed`), charges drawn (`pctile_charges`), loose balls recovered (`pctile_loose_balls`), box outs (`pctile_box_outs`).
+- Blank values are left out, never shown as 0.
+- A swipe that starts on the bars still navigates; only a tap opens a breakdown.
+
 ### F2c — Progress slider
 
 - A slider under the navigation spans the current (filtered, sorted) deck and tracks the current position.

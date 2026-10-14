@@ -11,7 +11,12 @@ interface DragStart {
   x: number
   y: number
   time: number
+  /** Whether we've taken pointer capture (only once it's clearly a horizontal drag). */
+  captured: boolean
 }
+
+/** Horizontal movement (px) before a press becomes a drag. Until then it's a tap, and clicks reach the target. */
+const CAPTURE_SLOP_PX = 8
 
 /**
  * Pointer-event swipe detection for touch and mouse. Returns handlers to spread on the swipe target,
@@ -41,21 +46,30 @@ export function useSwipe({ onSwipeLeft, onSwipeRight }: SwipeOptions) {
       if (!event.isPrimary || (event.pointerType === 'mouse' && event.button !== 0)) return
       // Taps on controls inside the card (e.g. the chart toggle) are clicks, not swipes.
       if (event.target instanceof Element && event.target.closest('button, a, input, select, textarea')) return
-      start.current = { pointerId: event.pointerId, x: event.clientX, y: event.clientY, time: event.timeStamp }
-      try {
-        event.currentTarget.setPointerCapture(event.pointerId)
-      } catch {
-        // Synthetic or already-released pointers can't be captured; tracking still works without it.
-      }
+      start.current = { pointerId: event.pointerId, x: event.clientX, y: event.clientY, time: event.timeStamp, captured: false }
       setDragging(true)
       setCommitted(false)
     },
     onPointerMove(event: PointerEvent<HTMLElement>) {
       const s = start.current
-      if (s && event.pointerId === s.pointerId) setOffset(event.clientX - s.x)
+      if (!s || event.pointerId !== s.pointerId) return
+      const dx = event.clientX - s.x
+      if (!s.captured && Math.abs(dx) > CAPTURE_SLOP_PX) {
+        s.captured = true
+        try {
+          event.currentTarget.setPointerCapture(event.pointerId)
+        } catch {
+          // Synthetic or already-released pointers can't be captured; tracking still works without it.
+        }
+      }
+      setOffset(dx)
     },
     onPointerUp: (event: PointerEvent<HTMLElement>) => finish(event, false),
     onPointerCancel: (event: PointerEvent<HTMLElement>) => finish(event, true),
+    // Before capture, a press that wanders off the deck would never see its pointerup; drop it.
+    onPointerLeave: (event: PointerEvent<HTMLElement>) => {
+      if (start.current && !start.current.captured) finish(event, true)
+    },
   }
 
   return { handlers, offset, dragging, animateToRest: !dragging && !committed }
