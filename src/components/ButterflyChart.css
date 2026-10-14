@@ -1,0 +1,108 @@
+.butterfly {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.butterfly-totals {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4.5rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Name shortens with an ellipsis; the number never does. */
+.butterfly-total {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5ch;
+  min-width: 0;
+}
+
+.butterfly-total-player {
+  justify-content: flex-end;
+}
+
+.butterfly-total-name {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.butterfly-total-value {
+  flex: none;
+}
+
+.butterfly-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.butterfly-row {
+  display: grid;
+  grid-template-columns: 1fr 4.5rem 1fr;
+  align-items: center;
+}
+
+.butterfly-half {
+  display: flex;
+}
+
+.butterfly-left {
+  justify-content: flex-end;
+}
+
+.butterfly-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 20px;
+  background: var(--bar);
+}
+
+.butterfly-left .butterfly-bar {
+  justify-content: flex-start;
+  border-radius: 4px 0 0 4px;
+}
+
+.butterfly-right .butterfly-bar {
+  justify-content: flex-end;
+  border-radius: 0 4px 4px 0;
+}
+
+.butterfly-value {
+  padding: 0 var(--space-1);
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--bar-text);
+}
+
+/* Too narrow to hold the number: put it just outside the bar's outer end. */
+.butterfly-bar:not([data-inside]) .butterfly-value {
+  position: absolute;
+  color: var(--color-text);
+}
+
+.butterfly-left .butterfly-bar:not([data-inside]) .butterfly-value {
+  right: 100%;
+}
+
+.butterfly-right .butterfly-bar:not([data-inside]) .butterfly-value {
+  left: 100%;
+}
+
+.butterfly-label {
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}

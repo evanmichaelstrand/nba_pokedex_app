@@ -1,0 +1,31 @@
+.stat-chart {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.stat-chart-toggle {
+  display: inline-flex;
+  align-self: center;
+  padding: 2px;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: var(--color-surface);
+}
+
+.stat-chart-option {
+  padding: 2px var(--space-3);
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-text-muted);
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.stat-chart-option[aria-pressed='true'] {
+  background: var(--color-text);
+  color: var(--color-surface);
+}

@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import type { Entry } from '../data'
 import { useArrowKeys } from '../hooks/useArrowKeys'
+import { useChartMode } from '../hooks/useChartMode'
 import { useDeckNavigation } from '../hooks/useDeckNavigation'
 import { useWriteHash } from '../hooks/useHashView'
 import { usePreloadNeighbors } from '../hooks/usePreloadImages'
@@ -31,6 +32,7 @@ export function Pokedex({ entries, initialPlayerId, query, sort, onClearQuery }:
   const { index, current, netSteps, next, previous, goTo } = useDeckNavigation(deck, initialPlayerId)
   // While the slider is being dragged, text updates live and images wait until release.
   const [scrubbing, setScrubbing] = useScrubbing()
+  const [chartMode, setChartMode] = useChartMode()
   useArrowKeys(previous, next)
   useWriteHash({ playerId: current?.id ?? null, query, sort })
   usePreloadNeighbors(deck, index, !scrubbing)
@@ -47,6 +49,8 @@ export function Pokedex({ entries, initialPlayerId, query, sort, onClearQuery }:
             netSteps={netSteps}
             statScaleMax={scaleMax}
             deferImages={scrubbing}
+            chartMode={chartMode}
+            onChartModeChange={setChartMode}
             onNext={next}
             onPrevious={previous}
           />

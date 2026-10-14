@@ -34,6 +34,9 @@ Work one item at a time; check it off and commit when done (lint, unit tests, an
   - [x] Team logos next to team names
   - [x] Faded team-color tint on the card
   - [x] Progress slider for quick flipping (F2c)
-- [ ] 12. **Visual design pass** — *blocked on visual direction (Open question 1).* Apply chosen style, check contrast over the logo, focus states, mobile + desktop.
+- [ ] 12. **Visual design pass** (match the @nbapokedex posts)
+  - [x] Stat colors, butterfly + radar charts with toggle, player/Pokémon series colors, Courier Prime font
+  - [ ] Remaining post elements (cream background, match-quality gauge, faded player photo, sprite in logo ring) — pending decisions
+  - [ ] Final contrast, focus, and mobile/desktop check
 - [x] 13. **E2E smoke tests** — loads, navigates, logo rotates, search narrows the deck, URL round-trips. Plus: 3D deck (neighbors visible, inert, reduced-motion flat), tiny filtered decks, alt text, keyboard-only use with visible focus, and an error-free full session.
 - [ ] 14. **Deploy config** — *blocked on hosting choice (Open question 2).* Bundle-size check (< 150 KB gzipped).

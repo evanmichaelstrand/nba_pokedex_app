@@ -39,6 +39,8 @@ export function useSwipe({ onSwipeLeft, onSwipeRight }: SwipeOptions) {
   const handlers = {
     onPointerDown(event: PointerEvent<HTMLElement>) {
       if (!event.isPrimary || (event.pointerType === 'mouse' && event.button !== 0)) return
+      // Taps on controls inside the card (e.g. the chart toggle) are clicks, not swipes.
+      if (event.target instanceof Element && event.target.closest('button, a, input, select, textarea')) return
       start.current = { pointerId: event.pointerId, x: event.clientX, y: event.clientY, time: event.timeStamp }
       try {
         event.currentTarget.setPointerCapture(event.pointerId)

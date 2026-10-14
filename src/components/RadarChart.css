@@ -1,0 +1,77 @@
+.radar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.radar-legend {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-4);
+  max-width: 100%;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.radar-key {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.radar-key::before {
+  content: '';
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--key);
+}
+
+.radar-svg {
+  display: block;
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+  overflow: visible;
+}
+
+.radar-ring {
+  fill: none;
+  stroke: var(--color-text-muted);
+  stroke-opacity: 0.35;
+  stroke-dasharray: 3 3;
+}
+
+.radar-ring-outer {
+  stroke-dasharray: none;
+}
+
+.radar-axis {
+  stroke: var(--color-text-muted);
+  stroke-opacity: 0.25;
+}
+
+.radar-tick {
+  font-size: 10px;
+  font-weight: 700;
+  fill: var(--color-text-muted);
+}
+
+.radar-shape {
+  fill: var(--shape);
+  fill-opacity: 0.35;
+  stroke: var(--shape);
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+
+.radar-label {
+  font-size: 11px;
+  font-weight: 700;
+}

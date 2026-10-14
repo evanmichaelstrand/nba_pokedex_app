@@ -1,12 +1,19 @@
 import type { Entry, StatLine } from '../data'
 
-export const STAT_ROWS: ReadonlyArray<{ key: keyof StatLine; label: string }> = [
-  { key: 'hp', label: 'HP' },
-  { key: 'attack', label: 'ATK' },
-  { key: 'defense', label: 'DEF' },
-  { key: 'spAttack', label: 'SP. ATK' },
-  { key: 'spDefense', label: 'SP. DEF' },
-  { key: 'speed', label: 'SPD' },
+export interface StatRow {
+  key: keyof StatLine
+  label: string
+  /** Suffix of the stat's CSS color tokens: --stat-{token} and --stat-{token}-text. */
+  token: string
+}
+
+export const STAT_ROWS: readonly StatRow[] = [
+  { key: 'hp', label: 'HP', token: 'hp' },
+  { key: 'attack', label: 'ATK', token: 'attack' },
+  { key: 'defense', label: 'DEF', token: 'defense' },
+  { key: 'spAttack', label: 'SP. ATK', token: 'sp-attack' },
+  { key: 'spDefense', label: 'SP. DEF', token: 'sp-defense' },
+  { key: 'speed', label: 'SPD', token: 'speed' },
 ]
 
 const SCALE_STEP = 10

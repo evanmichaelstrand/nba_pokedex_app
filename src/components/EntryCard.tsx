@@ -1,12 +1,14 @@
 import { Fragment, type CSSProperties } from 'react'
 import { SEASON } from '../config'
 import type { Entry } from '../data'
+import type { ChartMode } from '../hooks/useChartMode'
 import { useMediaQuery } from '../hooks/useMediaQuery'
 import { formatDexNumber, formatMatchPercent, formatPokemonName } from '../lib/format'
 import { playerHeadshotUrls, pokemonSpriteUrls } from '../lib/images'
+import { pokemonSeriesColor } from '../lib/seriesColors'
 import { getTeam } from '../lib/teams'
 import { FallbackImage } from './FallbackImage'
-import { StatBars } from './StatBars'
+import { StatChart } from './StatChart'
 import { TeamLabel } from './TeamLabel'
 import { TypeBadge } from './TypeBadge'
 import './EntryCard.css'
@@ -16,9 +18,19 @@ interface EntryCardProps {
   statScaleMax: number
   /** Hold off on loading images (while scrubbing). */
   deferImages?: boolean
+  chartMode?: ChartMode
+  onChartModeChange?: (mode: ChartMode) => void
 }
 
-export function EntryCard({ entry, statScaleMax, deferImages = false }: EntryCardProps) {
+const noop = () => {}
+
+export function EntryCard({
+  entry,
+  statScaleMax,
+  deferImages = false,
+  chartMode = 'bars',
+  onChartModeChange = noop,
+}: EntryCardProps) {
   const { player, pokemon } = entry
   const team = getTeam(player.mainTeam)
   const pokemonName = formatPokemonName(pokemon.name)
@@ -84,7 +96,11 @@ export function EntryCard({ entry, statScaleMax, deferImages = false }: EntryCar
         <span className="entry-match-value">{formatMatchPercent(entry.matchPercentage)}</span> match
       </p>
 
-      <StatBars
+      <StatChart
+        mode={chartMode}
+        onModeChange={onChartModeChange}
+        playerColor={team.color}
+        pokemonColor={pokemonSeriesColor(team.color)}
         playerName={player.name}
         pokemonName={pokemonName}
         playerStats={player.stats}

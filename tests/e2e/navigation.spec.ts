@@ -82,8 +82,9 @@ test.describe('with a small deck', () => {
   })
 })
 
+/** A point on the focused card's images: draggable, and clear of buttons (which never start a swipe). */
 async function swipeStart(page: Page) {
-  const box = (await page.locator('.deck').boundingBox())!
+  const box = (await page.locator('.deck-slot[data-offset="0"] .entry-image-frame').first().boundingBox())!
   return { x: box.x + box.width / 2, y: box.y + box.height / 2 }
 }
 

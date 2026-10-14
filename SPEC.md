@@ -95,7 +95,9 @@ Each entry fills one screen and shows:
 Done when:
 - All fields above render for every row in the CSV, including single-type Pokémon.
 - Stat labels are `HP / ATK / DEF / SP. ATK / SP. DEF / SPD`.
-- Stats are shown as paired horizontal bars on a **shared scale** (0–max across both datasets, about 180) so the comparison is visually honest, with the number beside each bar.
+- Stats are shown on a **shared scale** (0–max across both datasets, about 180) so the comparison is visually honest, in one of two views the visitor can switch between (the choice persists while navigating and per browser; default **Bars**):
+  - **Bars:** a butterfly chart — player bars grow left, Pokémon bars grow right from a center column of stat labels, each stat in its own color, values on the bars, base stat totals on top.
+  - **Radar:** both stat lines overlaid on a hexagon (HP at top, then Attack, Defense, Speed, Sp. Def, Sp. Atk clockwise), guide rings every 50, axis labels as stat-colored pills, with a legend.
 - Fits in one mobile viewport (390×844) without vertical scrolling.
 
 ### F2 — Navigation
@@ -178,7 +180,7 @@ The look follows the @nbapokedex social posts.
 
 ### Stat colors
 
-Each stat has one color, used everywhere that stat appears (chart bars, labels, legends). Define them once as CSS custom properties.
+Each stat has one color, used everywhere that stat appears (chart bars, labels, legends). Define them once as CSS custom properties. Text on a stat color is black or white, whichever meets WCAG AA contrast.
 
 | Stat | Hex |
 |---|---|
@@ -188,6 +190,18 @@ Each stat has one color, used everywhere that stat appears (chart bars, labels, 
 | Special Attack | `#14c3f1` |
 | Special Defense | `#4a6adf` |
 | Speed | `#d51dad` |
+
+### Player vs. Pokémon colors
+
+Where the two sides need their own colors (radar shapes and legend):
+
+- **Player:** the main team's color.
+- **Pokémon:** `#ff0000` or `#ffde00`, whichever is easier to tell apart from the team color (larger perceptual color difference). Most teams get yellow; green teams get red.
+
+### Typography and card
+
+- **Font:** Courier Prime (SIL Open Font License), self-hosted from `public/fonts/` with its license file. No runtime font requests.
+- **Card:** keeps the faded team-color tint (F1b).
 
 ## Future backend readiness
 
@@ -255,7 +269,7 @@ These may come later; the code should not prevent them, but don't build toward t
 
 Decide these before or during planning:
 
-1. **Visual direction:** match the @nbapokedex social posts (reference post shared; stat colors recorded under "Visual design"). Still to decide: chart style on the card, player/Pokémon colors, font, and whether to keep the team tint.
+1. **Visual direction:** match the @nbapokedex social posts. Decided so far (see "Visual design"): stat colors, both chart views with a toggle, player/Pokémon colors, Courier Prime, team tint kept. Still open: cream background, match-quality gauge, faded player photo, sprite in the logo ring.
 2. **Hosting:** Vercel or Netlify (recommended, since both can host a backend later), or GitHub Pages? Custom domain?
 3. **Image hosting:** keep hot-linking NBA and PokéAPI images, or download and serve them myself for reliability?
 

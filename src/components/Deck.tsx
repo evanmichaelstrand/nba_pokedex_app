@@ -1,4 +1,5 @@
 import type { Entry } from '../data'
+import type { ChartMode } from '../hooks/useChartMode'
 import { useElementWidth } from '../hooks/useElementWidth'
 import { useMediaQuery } from '../hooks/useMediaQuery'
 import { useSwipe } from '../hooks/useSwipe'
@@ -15,6 +16,8 @@ interface DeckProps {
   statScaleMax: number
   /** Hold off on loading images (while scrubbing). */
   deferImages: boolean
+  chartMode: ChartMode
+  onChartModeChange: (mode: ChartMode) => void
   onNext: () => void
   onPrevious: () => void
 }
@@ -22,7 +25,8 @@ interface DeckProps {
 const mod = (n: number, m: number) => ((n % m) + m) % m
 
 /** The swipeable 3D deck: focused card in front, neighbors angled away on a cylinder. */
-export function Deck({ deck, index, netSteps, statScaleMax, deferImages, onNext, onPrevious }: DeckProps) {
+export function Deck(props: DeckProps) {
+  const { deck, index, netSteps, statScaleMax, deferImages, chartMode, onChartModeChange, onNext, onPrevious } = props
   const wide = useMediaQuery('(min-width: 640px)')
   const flat = useMediaQuery('(prefers-reduced-motion: reduce)')
   // Swipe left = next, swipe right = previous.
@@ -49,7 +53,13 @@ export function Deck({ deck, index, netSteps, statScaleMax, deferImages, onNext,
             style={flat ? undefined : { transform: poseTransform(pose), opacity: pose.opacity, zIndex: pose.zIndex }}
           >
             {focused || wide ? (
-              <EntryCard entry={entry} statScaleMax={statScaleMax} deferImages={deferImages} />
+              <EntryCard
+                entry={entry}
+                statScaleMax={statScaleMax}
+                deferImages={deferImages}
+                chartMode={chartMode}
+                onChartModeChange={onChartModeChange}
+              />
             ) : (
               <PeekCard entry={entry} side={o < 0 ? 'left' : 'right'} deferImages={deferImages} />
             )}
