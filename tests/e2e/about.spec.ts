@@ -19,6 +19,16 @@ test('About explains each stat, its inputs and weights, and how to get in touch'
   const defense = dialog(page).getByRole('listitem').filter({ has: page.getByRole('heading', { name: /^Defense$/ }) })
   await expect(defense.locator('dt')).toHaveText(['Interior defensive FG%', 'Rebounds', 'Blocks'])
   await expect(defense.locator('dd')).toHaveText(['50%', '30%', '20%'])
+  for (const [name, url] of [
+    ['Instagram', 'https://www.instagram.com/nbapokedex/'],
+    ['TikTok', 'https://www.tiktok.com/@nbapokedex'],
+    ['YouTube', 'https://www.youtube.com/@nbapokedex'],
+  ]) {
+    await expect(dialog(page).getByRole('link', { name })).toHaveAttribute('href', url)
+  }
+  await expect(dialog(page).getByRole('heading', { name: 'Adjustments' })).toBeVisible()
+  await expect(dialog(page).getByRole('heading', { name: 'Drawbacks' })).toBeVisible()
+  await expect(dialog(page).locator('.about-drawbacks li')).toHaveCount(3)
   await expect(dialog(page).getByRole('link', { name: 'nbapokedex@gmail.com' })).toHaveAttribute(
     'href',
     'mailto:nbapokedex@gmail.com',
