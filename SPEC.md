@@ -107,6 +107,16 @@ Done when:
 
 Done when: all three input methods work, a short swipe (under a threshold) snaps back without navigating, and rapid repeated swipes don't skip or desync entries.
 
+### F2b — 3D deck presentation
+
+- The deck looks like a rotating cylinder: the focused card pops forward at full size; neighboring entries are visible slightly to the left and right, smaller, angled away, and dimmed.
+- Dragging rotates the cylinder with the pointer; releasing settles on the nearest card (same swipe threshold as F2).
+- **Mobile:** neighbors are lightweight peek cards (Pokémon artwork + player name). **Desktop:** neighbors are scaled-down full cards.
+- Under `prefers-reduced-motion`, fall back to the flat single-card view.
+- Built with CSS 3D transforms; no carousel library.
+
+Done when: neighbors are visible on both sides at 390×844 and desktop, the focused card still fits without vertical scrolling, and all F2 navigation criteria still pass.
+
 ### F3 — Rotating background logo
 
 - The black-and-white line-art logo (`logo-bw.jpg`) sits behind the content, centered, large, and **semi-transparent** (about 8–12% opacity, tune for legibility). The color logo (`logo-color.jpg`) appears small in a header and does not rotate.

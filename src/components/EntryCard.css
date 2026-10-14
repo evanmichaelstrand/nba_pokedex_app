@@ -8,7 +8,8 @@
   padding: var(--space-4);
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
-  background: color-mix(in srgb, var(--color-surface) 92%, transparent);
+  /* Translucent so the background logo reads through faintly without hurting legibility. */
+  background: color-mix(in srgb, var(--color-surface) 78%, transparent);
 }
 
 .entry-matchup {
