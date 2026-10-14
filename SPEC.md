@@ -109,7 +109,7 @@ Done when: all three input methods work, a short swipe (under a threshold) snaps
 
 ### F3 — Rotating background logo
 
-- The nba_pokedex logo sits behind the content, centered, large, and **semi-transparent** (about 8–12% opacity, tune for legibility).
+- The black-and-white line-art logo (`logo-bw.jpg`) sits behind the content, centered, large, and **semi-transparent** (about 8–12% opacity, tune for legibility). The color logo (`logo-color.jpg`) appears small in a header and does not rotate.
 - Each navigation **rotates the logo 20° cumulatively**: next = +20°, previous = −20°. It never snaps back to 0.
 - Rotation animates smoothly (about 300–400 ms ease-out).
 - Under `prefers-reduced-motion`, rotation is instant (no animation).
