@@ -1,0 +1,41 @@
+.match-gauge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+}
+
+.match-gauge-dial {
+  display: block;
+  width: 76px;
+  height: auto;
+  overflow: visible;
+}
+
+.match-gauge-arc {
+  fill: none;
+  stroke: var(--color-match);
+  stroke-width: 11;
+}
+
+.match-gauge-needle {
+  fill: var(--color-text);
+}
+
+.match-gauge-text {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  line-height: 1.1;
+}
+
+.match-gauge-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.match-gauge-label {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}

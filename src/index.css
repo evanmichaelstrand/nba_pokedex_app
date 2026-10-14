@@ -53,8 +53,8 @@
   /* Darker accent for white text on an accent background (WCAG AA). */
   --color-accent-strong: #c2410c;
   --color-focus: #1d6ff2;
-  --color-player: #f26b1d;
-  --color-pokemon: #3a6fd8;
+  /* Match-quality gauge arc (the posts' dark green). */
+  --color-match: #2e6b10;
 
   /* Spacing */
   --space-1: 4px;

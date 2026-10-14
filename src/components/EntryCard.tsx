@@ -3,11 +3,12 @@ import { SEASON } from '../config'
 import type { Entry } from '../data'
 import type { ChartMode } from '../hooks/useChartMode'
 import { useMediaQuery } from '../hooks/useMediaQuery'
-import { formatDexNumber, formatMatchPercent, formatPokemonName, shortPlayerName } from '../lib/format'
+import { formatDexNumber, formatPokemonName, shortPlayerName } from '../lib/format'
 import { playerHeadshotUrls, pokemonSpriteUrls } from '../lib/images'
 import { pokemonSeriesColor } from '../lib/seriesColors'
 import { getTeam } from '../lib/teams'
 import { FallbackImage } from './FallbackImage'
+import { MatchGauge } from './MatchGauge'
 import { StatChart } from './StatChart'
 import { TeamLabel } from './TeamLabel'
 import { TypeBadge } from './TypeBadge'
@@ -92,9 +93,7 @@ export function EntryCard({
         </section>
       </div>
 
-      <p className="entry-match">
-        <span className="entry-match-value">{formatMatchPercent(entry.matchPercentage)}</span> match
-      </p>
+      <MatchGauge fraction={entry.matchPercentage} />
 
       <StatChart
         mode={chartMode}

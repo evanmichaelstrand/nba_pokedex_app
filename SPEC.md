@@ -90,7 +90,7 @@ Each entry fills one screen and shows:
 1. **NBA player:** name and headshot
 2. **Team(s):** main team's full name with a team-color accent, plus any other teams as secondary text
 3. **Pokémon:** display name (title case, hyphens → spaces where appropriate), official artwork, type badge(s), and Dex number (e.g. `#121`; hide the number when `pokemon_id` is above 10000, since those are form IDs)
-4. **Stats for both:** the six stats side by side, player vs. Pokémon, plus each base stat total and the match percentage
+4. **Stats for both:** the six stats side by side, player vs. Pokémon, plus each base stat total and the match percentage, shown as a **match-quality gauge** (semicircle, needle from 0% at left to 100% at right) with the exact percent beside it
 
 Done when:
 - All fields above render for every row in the CSV, including single-type Pokémon.
@@ -269,7 +269,7 @@ These may come later; the code should not prevent them, but don't build toward t
 
 Decide these before or during planning:
 
-1. **Visual direction:** match the @nbapokedex social posts. Decided so far (see "Visual design"): stat colors, both chart views with a toggle, player/Pokémon colors, Courier Prime, team tint kept. Still open: cream background, match-quality gauge, faded player photo, sprite in the logo ring.
+1. **Visual direction:** match the @nbapokedex social posts. Decided so far (see "Visual design"): stat colors, both chart views with a toggle, player/Pokémon colors, Courier Prime, team tint kept. Background: light gray graph paper (40px grid, 200px major lines with nodes), replacing the posts' cream. Match-quality gauge done. Faded player photo and sprite-in-ring: not now.
 2. **Hosting:** Vercel or Netlify (recommended, since both can host a backend later), or GitHub Pages? Custom domain?
 3. **Image hosting:** keep hot-linking NBA and PokéAPI images, or download and serve them myself for reliability?
 
