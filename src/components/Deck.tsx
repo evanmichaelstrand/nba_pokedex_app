@@ -13,6 +13,8 @@ interface DeckProps {
   /** Net navigation steps; gives each slot a stable key so cards glide between positions. */
   netSteps: number
   statScaleMax: number
+  /** Hold off on loading images (while scrubbing). */
+  deferImages: boolean
   onNext: () => void
   onPrevious: () => void
 }
@@ -20,7 +22,7 @@ interface DeckProps {
 const mod = (n: number, m: number) => ((n % m) + m) % m
 
 /** The swipeable 3D deck: focused card in front, neighbors angled away on a cylinder. */
-export function Deck({ deck, index, netSteps, statScaleMax, onNext, onPrevious }: DeckProps) {
+export function Deck({ deck, index, netSteps, statScaleMax, deferImages, onNext, onPrevious }: DeckProps) {
   const wide = useMediaQuery('(min-width: 640px)')
   const flat = useMediaQuery('(prefers-reduced-motion: reduce)')
   // Swipe left = next, swipe right = previous.
@@ -47,9 +49,9 @@ export function Deck({ deck, index, netSteps, statScaleMax, onNext, onPrevious }
             style={flat ? undefined : { transform: poseTransform(pose), opacity: pose.opacity, zIndex: pose.zIndex }}
           >
             {focused || wide ? (
-              <EntryCard entry={entry} statScaleMax={statScaleMax} />
+              <EntryCard entry={entry} statScaleMax={statScaleMax} deferImages={deferImages} />
             ) : (
-              <PeekCard entry={entry} side={o < 0 ? 'left' : 'right'} />
+              <PeekCard entry={entry} side={o < 0 ? 'left' : 'right'} deferImages={deferImages} />
             )}
           </div>
         )

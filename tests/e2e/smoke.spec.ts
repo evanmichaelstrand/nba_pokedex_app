@@ -33,6 +33,8 @@ test('a full session runs without JavaScript errors', async ({ page }) => {
   await page.getByRole('searchbox').fill('zzzz')
   await expect(page.getByText('No matches')).toBeVisible()
   await page.getByRole('button', { name: 'Clear search' }).last().click()
+  // Let the throttled URL write catch up before reloading.
+  await expect.poll(() => page.evaluate(() => window.location.hash)).not.toContain('q=')
   await page.reload()
   await expect(card(page)).toBeVisible()
 

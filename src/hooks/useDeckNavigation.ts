@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react'
 import type { Entry } from '../data'
-import { indexOfId, stepId } from '../lib/deck'
+import { indexOfId, jumpTo, stepId } from '../lib/deck'
 
 interface Position {
   id: number | null
@@ -34,6 +34,14 @@ export function useDeckNavigation(deck: readonly Entry[], initialId: number | nu
   )
   const next = useCallback(() => step(1), [step])
   const previous = useCallback(() => step(-1), [step])
+  const goTo = useCallback(
+    (targetIndex: number) =>
+      setPosition((p) => {
+        const jump = jumpTo(deck, p.id, targetIndex)
+        return jump ? { id: jump.id, netSteps: p.netSteps + jump.steps } : p
+      }),
+    [deck],
+  )
 
-  return { index, current, netSteps: position.netSteps, next, previous }
+  return { index, current, netSteps: position.netSteps, next, previous, goTo }
 }

@@ -1,12 +1,10 @@
 import { useMemo } from 'react'
-import { SEASON } from '../config'
 import type { Entry } from '../data'
 import { useArrowKeys } from '../hooks/useArrowKeys'
 import { useDeckNavigation } from '../hooks/useDeckNavigation'
-import { useMediaQuery } from '../hooks/useMediaQuery'
 import { useWriteHash } from '../hooks/useHashView'
-import { usePreloadImages } from '../hooks/usePreloadImages'
-import { playerHeadshotUrls, pokemonSpriteUrls } from '../lib/images'
+import { usePreloadNeighbors } from '../hooks/usePreloadImages'
+import { useScrubbing } from '../hooks/useScrubbing'
 import { filterEntries } from '../lib/search'
 import { sortEntries, type SortKey } from '../lib/sort'
 import { statScaleMax } from '../lib/stats'
@@ -15,6 +13,7 @@ import { Deck } from './Deck'
 import { FilterChip } from './FilterChip'
 import { NavControls } from './NavControls'
 import { NoMatches } from './NoMatches'
+import { ProgressSlider } from './ProgressSlider'
 
 interface PokedexProps {
   entries: Entry[]
@@ -29,19 +28,12 @@ export function Pokedex({ entries, initialPlayerId, query, sort, onClearQuery }:
   const deck = useMemo(() => sortEntries(filterEntries(entries, query), sort), [entries, query, sort])
   // Scale comes from the full dataset so bars mean the same thing whatever the filter.
   const scaleMax = useMemo(() => statScaleMax(entries), [entries])
-  const { index, current, netSteps, next, previous } = useDeckNavigation(deck, initialPlayerId)
+  const { index, current, netSteps, next, previous, goTo } = useDeckNavigation(deck, initialPlayerId)
+  // While the slider is being dragged, text updates live and images wait until release.
+  const [scrubbing, setScrubbing] = useScrubbing()
   useArrowKeys(previous, next)
   useWriteHash({ playerId: current?.id ?? null, query, sort })
-
-  const animated = !useMediaQuery('(prefers-reduced-motion: reduce)')
-  // Warm the cache for everything the next few moves can bring into focus.
-  const ahead = [1, -1, 2, -2, 3, -3].map((o) => deck[(((index + o) % deck.length) + deck.length) % deck.length])
-  // (First choice of each image only; fallbacks are rare and load on demand.)
-  usePreloadImages(
-    ahead.flatMap((e) =>
-      e ? [playerHeadshotUrls(e.id, [e.player.mainTeam], SEASON?.startYear ?? null)[0], pokemonSpriteUrls(e.pokemon.id, animated)[0]] : [],
-    ),
-  )
+  usePreloadNeighbors(deck, index, !scrubbing)
 
   const filtered = query.trim() !== ''
   return (
@@ -54,10 +46,25 @@ export function Pokedex({ entries, initialPlayerId, query, sort, onClearQuery }:
             index={index}
             netSteps={netSteps}
             statScaleMax={scaleMax}
+            deferImages={scrubbing}
             onNext={next}
             onPrevious={previous}
           />
-          <NavControls index={index} total={deck.length} onPrevious={previous} onNext={next}>
+          <NavControls
+            index={index}
+            total={deck.length}
+            onPrevious={previous}
+            onNext={next}
+            slider={
+              <ProgressSlider
+                index={index}
+                total={deck.length}
+                currentLabel={current.player.name}
+                onChange={goTo}
+                onScrubbingChange={setScrubbing}
+              />
+            }
+          >
             {filtered && <FilterChip query={query} onClear={onClearQuery} />}
           </NavControls>
         </>

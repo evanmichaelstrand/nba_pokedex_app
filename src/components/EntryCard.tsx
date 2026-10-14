@@ -14,9 +14,11 @@ import './EntryCard.css'
 interface EntryCardProps {
   entry: Entry
   statScaleMax: number
+  /** Hold off on loading images (while scrubbing). */
+  deferImages?: boolean
 }
 
-export function EntryCard({ entry, statScaleMax }: EntryCardProps) {
+export function EntryCard({ entry, statScaleMax, deferImages = false }: EntryCardProps) {
   const { player, pokemon } = entry
   const team = getTeam(player.mainTeam)
   const pokemonName = formatPokemonName(pokemon.name)
@@ -34,6 +36,7 @@ export function EntryCard({ entry, statScaleMax }: EntryCardProps) {
           <div className="entry-image-frame entry-image-frame-player">
             <FallbackImage
               className="entry-image"
+              deferred={deferImages}
               sources={playerHeadshotUrls(entry.id, [player.mainTeam, ...player.otherTeams], SEASON?.startYear ?? null)}
               alt={`${player.name} headshot`}
               width={1040}
@@ -61,6 +64,7 @@ export function EntryCard({ entry, statScaleMax }: EntryCardProps) {
           <div className="entry-image-frame">
             <FallbackImage
               className="entry-image"
+              deferred={deferImages}
               sources={pokemonSpriteUrls(pokemon.id, animated)}
               alt={`${pokemonName} artwork`}
               width={475}

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { Entry } from '../../src/data'
-import { indexOfId, stepId } from '../../src/lib/deck'
+import { indexOfId, jumpTo, stepId } from '../../src/lib/deck'
 
 const stats = { hp: 1, attack: 1, defense: 1, spAttack: 1, spDefense: 1, speed: 1 }
 const entry = (id: number, pokemonId: number): Entry => ({
@@ -40,5 +40,19 @@ describe('stepId', () => {
   it('handles tiny decks', () => {
     expect(stepId([], 10, 1)).toBeNull()
     expect(stepId([entry(5, 5)], 5, 1)).toBe(5)
+  })
+})
+
+describe('jumpTo', () => {
+  it('returns the target ID and the signed number of steps', () => {
+    expect(jumpTo(deck, 10, 2)).toEqual({ id: 30, steps: 2 })
+    expect(jumpTo(deck, 30, 0)).toEqual({ id: 10, steps: -2 })
+    expect(jumpTo(deck, 20, 1)).toEqual({ id: 20, steps: 0 })
+  })
+
+  it('clamps out-of-range targets and handles empty decks', () => {
+    expect(jumpTo(deck, 10, 99)).toEqual({ id: 30, steps: 2 })
+    expect(jumpTo(deck, 10, -5)).toEqual({ id: 10, steps: 0 })
+    expect(jumpTo([], 10, 1)).toBeNull()
   })
 })

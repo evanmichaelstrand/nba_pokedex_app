@@ -11,10 +11,12 @@ interface PeekCardProps {
   entry: Entry
   /** Which side of the focused card this sits on; content hugs the edge that stays visible. */
   side: 'left' | 'right'
+  /** Hold off on loading images (while scrubbing). */
+  deferImages?: boolean
 }
 
 /** Lightweight neighbor card for narrow screens: just the Pokémon artwork and the player's name. */
-export function PeekCard({ entry, side }: PeekCardProps) {
+export function PeekCard({ entry, side, deferImages = false }: PeekCardProps) {
   const animated = !useMediaQuery('(prefers-reduced-motion: reduce)')
   return (
     <div
@@ -22,7 +24,7 @@ export function PeekCard({ entry, side }: PeekCardProps) {
       data-side={side}
       style={{ '--team-color': getTeam(entry.player.mainTeam).color } as CSSProperties}
     >
-      <FallbackImage className="peek-image" sources={pokemonSpriteUrls(entry.pokemon.id, animated)} alt="" />
+      <FallbackImage className="peek-image" deferred={deferImages} sources={pokemonSpriteUrls(entry.pokemon.id, animated)} alt="" />
       <p className="peek-name">{entry.player.name}</p>
       <p className="peek-pokemon">{formatPokemonName(entry.pokemon.name)}</p>
     </div>

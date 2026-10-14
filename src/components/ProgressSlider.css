@@ -1,0 +1,57 @@
+.progress-slider {
+  --track-height: 4px;
+  --thumb-size: 18px;
+  width: 100%;
+  height: 24px;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+  /* Dragging the slider must not scroll or swipe the page. */
+  touch-action: none;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+/* Track: filled up to the current position. */
+.progress-slider::-webkit-slider-runnable-track {
+  height: var(--track-height);
+  border-radius: 999px;
+  background: linear-gradient(
+    to right,
+    var(--color-accent) var(--progress),
+    var(--color-border) var(--progress)
+  );
+}
+
+.progress-slider::-moz-range-track {
+  height: var(--track-height);
+  border-radius: 999px;
+  background: var(--color-border);
+}
+
+.progress-slider::-moz-range-progress {
+  height: var(--track-height);
+  border-radius: 999px;
+  background: var(--color-accent);
+}
+
+.progress-slider::-webkit-slider-thumb {
+  width: var(--thumb-size);
+  height: var(--thumb-size);
+  margin-top: calc((var(--track-height) - var(--thumb-size)) / 2);
+  border: 2px solid var(--color-surface);
+  border-radius: 50%;
+  background: var(--color-accent-strong);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.25);
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.progress-slider::-moz-range-thumb {
+  width: var(--thumb-size);
+  height: var(--thumb-size);
+  border: 2px solid var(--color-surface);
+  border-radius: 50%;
+  background: var(--color-accent-strong);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.25);
+}

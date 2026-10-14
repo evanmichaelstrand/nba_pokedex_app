@@ -49,6 +49,8 @@ test('reloading keeps the same view', async ({ page }) => {
   await page.keyboard.press('ArrowLeft')
   await page.getByRole('combobox', { name: 'Sort by' }).selectOption('type')
   await expect(playerName(page)).toHaveText('Traded Guy')
+  // The URL catches up within a moment (writes are throttled).
+  await expect.poll(() => hash(page)).toBe('#/player/3?sort=type')
   await page.reload()
   await expect(playerName(page)).toHaveText('Traded Guy')
   await expect(page.getByRole('combobox', { name: 'Sort by' })).toHaveValue('type')

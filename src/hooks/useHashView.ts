@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { buildHash, parseHash, type ViewState } from '../lib/urlState'
 
 /**
@@ -19,12 +19,35 @@ export function useHashView() {
   return requested
 }
 
-/** Mirrors the view into the URL without adding history entries (Back still leaves the site). */
+/** Minimum gap between URL writes, so fast flipping stays under Safari's replaceState rate limit. */
+const WRITE_INTERVAL_MS = 250
+
+function replaceHash(hash: string) {
+  if (hash !== window.location.hash) {
+    window.history.replaceState(window.history.state, '', `${window.location.pathname}${window.location.search}${hash}`)
+  }
+}
+
+/**
+ * Mirrors the view into the URL without adding history entries (Back still leaves the site).
+ * Throttled: a change is written at once unless one was just written, in which case the latest
+ * view is written as soon as the interval allows.
+ */
 export function useWriteHash(view: ViewState) {
   const hash = buildHash(view)
+  const lastWrite = useRef(0)
+
   useEffect(() => {
-    if (hash !== window.location.hash) {
-      window.history.replaceState(window.history.state, '', `${window.location.pathname}${window.location.search}${hash}`)
+    const write = () => {
+      replaceHash(hash)
+      lastWrite.current = Date.now()
     }
+    const wait = lastWrite.current + WRITE_INTERVAL_MS - Date.now()
+    if (wait <= 0) {
+      write()
+      return
+    }
+    const timer = window.setTimeout(write, wait)
+    return () => window.clearTimeout(timer)
   }, [hash])
 }
