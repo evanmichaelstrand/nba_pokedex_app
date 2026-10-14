@@ -3,9 +3,9 @@ import type { Entry } from '../data'
 import { useArrowKeys } from '../hooks/useArrowKeys'
 import { useDeckNavigation } from '../hooks/useDeckNavigation'
 import { usePreloadImages } from '../hooks/usePreloadImages'
-import { sortByPokemonId } from '../lib/deck'
 import { playerHeadshotUrl, pokemonArtworkUrl } from '../lib/images'
 import { filterEntries } from '../lib/search'
+import { sortEntries, type SortKey } from '../lib/sort'
 import { statScaleMax } from '../lib/stats'
 import { BackgroundLogo } from './BackgroundLogo'
 import { Deck } from './Deck'
@@ -16,11 +16,12 @@ import { NoMatches } from './NoMatches'
 interface PokedexProps {
   entries: Entry[]
   query: string
+  sort: SortKey
   onClearQuery: () => void
 }
 
-export function Pokedex({ entries, query, onClearQuery }: PokedexProps) {
-  const deck = useMemo(() => sortByPokemonId(filterEntries(entries, query)), [entries, query])
+export function Pokedex({ entries, query, sort, onClearQuery }: PokedexProps) {
+  const deck = useMemo(() => sortEntries(filterEntries(entries, query), sort), [entries, query, sort])
   // Scale comes from the full dataset so bars mean the same thing whatever the filter.
   const scaleMax = useMemo(() => statScaleMax(entries), [entries])
   const { index, current, netSteps, next, previous } = useDeckNavigation(deck)

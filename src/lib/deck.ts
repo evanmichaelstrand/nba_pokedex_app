@@ -1,10 +1,5 @@
 import type { Entry } from '../data'
 
-/** Default deck order: by Pokémon ID ascending, ties by player ID so the order is stable. */
-export function sortByPokemonId(entries: readonly Entry[]): Entry[] {
-  return [...entries].sort((a, b) => a.pokemon.id - b.pokemon.id || a.id - b.id)
-}
-
 /** Index of the entry with this ID, or 0 if it isn't in the deck (or no ID is set). */
 export function indexOfId(deck: readonly Entry[], id: number | null): number {
   if (id === null) return 0

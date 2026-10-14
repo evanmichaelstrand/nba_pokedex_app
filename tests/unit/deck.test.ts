@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { Entry } from '../../src/data'
-import { indexOfId, sortByPokemonId, stepId } from '../../src/lib/deck'
+import { indexOfId, stepId } from '../../src/lib/deck'
 
 const stats = { hp: 1, attack: 1, defense: 1, spAttack: 1, spDefense: 1, speed: 1 }
 const entry = (id: number, pokemonId: number): Entry => ({
@@ -12,14 +12,6 @@ const entry = (id: number, pokemonId: number): Entry => ({
 })
 
 const deck = [entry(10, 1), entry(20, 2), entry(30, 3)]
-
-describe('sortByPokemonId', () => {
-  it('orders by Pokémon ID without mutating the input', () => {
-    const input = [entry(1, 300), entry(2, 5), entry(3, 10049)]
-    expect(sortByPokemonId(input).map((e) => e.id)).toEqual([2, 1, 3])
-    expect(input.map((e) => e.id)).toEqual([1, 2, 3])
-  })
-})
 
 describe('indexOfId', () => {
   it('finds entries by ID and falls back to the first', () => {
