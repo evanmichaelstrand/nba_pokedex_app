@@ -81,6 +81,8 @@ body {
   display: flex;
   flex-direction: column;
   flex: 1;
+  /* A card dragged sideways must never make the page scroll horizontally. */
+  overflow-x: clip;
 }
 
 .pokedex {
@@ -111,7 +113,7 @@ body {
     column-gap: var(--space-5);
   }
 
-  .pokedex > .entry {
+  .pokedex > .swipe-area {
     grid-area: 1 / 2;
   }
 

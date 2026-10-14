@@ -98,3 +98,21 @@
   font-weight: 800;
   color: var(--color-text);
 }
+
+/* New cards slide in from the side the user moved toward (--enter-from: 1 next, -1 previous, 0 first load). */
+.entry {
+  animation: entry-in 180ms ease-out;
+}
+
+@keyframes entry-in {
+  from {
+    opacity: 0;
+    transform: translateX(calc(var(--enter-from, 0) * 32px));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .entry {
+    animation: none;
+  }
+}

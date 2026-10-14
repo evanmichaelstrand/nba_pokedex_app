@@ -49,7 +49,66 @@ test.describe('with a small deck', () => {
     await expect(playerName(page)).toHaveText('Middle Player')
     await expect(position(page)).toHaveText(at(2, 3))
   })
+
+  test('mouse drag left goes next, right goes previous', async ({ page }) => {
+    await mouseDrag(page, -150)
+    await expect(playerName(page)).toHaveText('Middle Player')
+    await mouseDrag(page, 150)
+    await mouseDrag(page, 150)
+    await expect(playerName(page)).toHaveText('Last Player')
+  })
+
+  test('a short drag snaps back without navigating', async ({ page }) => {
+    await mouseDrag(page, -40, 600)
+    await expect(playerName(page)).toHaveText('First Player')
+    await expect(page.locator('.swipe-area')).not.toHaveAttribute('style', /translateX/)
+  })
+
+  test('rapid swipes do not skip or desync', async ({ page }) => {
+    for (let i = 0; i < 5; i++) await mouseDrag(page, -150)
+    // 5 steps in a deck of 3 lands on index 2.
+    await expect(playerName(page)).toHaveText('Last Player')
+    await expect(position(page)).toHaveText(at(3, 3))
+  })
+
+  test('touch swipes navigate', async ({ page, isMobile }) => {
+    test.skip(!isMobile, 'touch only')
+    await touchSwipe(page, -150)
+    await expect(playerName(page)).toHaveText('Middle Player')
+    await touchSwipe(page, 150)
+    await expect(playerName(page)).toHaveText('First Player')
+    await touchSwipe(page, -30, 600)
+    await expect(playerName(page)).toHaveText('First Player')
+  })
 })
+
+async function swipeStart(page: Page) {
+  const box = (await page.locator('.swipe-area').boundingBox())!
+  return { x: box.x + box.width / 2, y: box.y + box.height / 2 }
+}
+
+/** Drags across the card with the mouse; holdMs pauses before releasing to make the gesture slow. */
+async function mouseDrag(page: Page, dx: number, holdMs = 0) {
+  const { x, y } = await swipeStart(page)
+  await page.mouse.move(x, y)
+  await page.mouse.down()
+  await page.mouse.move(x + dx, y, { steps: 8 })
+  if (holdMs) await page.waitForTimeout(holdMs)
+  await page.mouse.up()
+}
+
+/** Real touch events via the Chrome DevTools Protocol (Playwright has no touch-drag API). */
+async function touchSwipe(page: Page, dx: number, holdMs = 0) {
+  const { x, y } = await swipeStart(page)
+  const cdp = await page.context().newCDPSession(page)
+  await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x, y }] })
+  for (let i = 1; i <= 8; i++) {
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: x + (dx * i) / 8, y }] })
+  }
+  if (holdMs) await page.waitForTimeout(holdMs)
+  await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] })
+  await cdp.detach()
+}
 
 test('every entry renders fully and fits the viewport', async ({ page }) => {
   test.setTimeout(120_000)
