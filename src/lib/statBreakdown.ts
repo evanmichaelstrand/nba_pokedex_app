@@ -104,6 +104,11 @@ function formatValue(value: number, format: Format): string {
 }
 
 /** The stat's real-number inputs for this player. Unavailable values are left out, never shown as 0. */
+/** One sentence on what a stat measures (the same text the card's breakdown shows). */
+export function statSummary(stat: keyof StatLine): string {
+  return BREAKDOWNS[stat].summary
+}
+
 export function statBreakdown(stat: keyof StatLine, realStats: RealStats): StatBreakdown {
   const { summary, metrics } = BREAKDOWNS[stat]
   const lines: BreakdownLine[] = []

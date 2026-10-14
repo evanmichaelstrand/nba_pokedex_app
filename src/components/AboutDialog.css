@@ -1,0 +1,134 @@
+.about-button {
+  align-self: center;
+  padding: 2px var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.about-dialog {
+  width: min(480px, calc(100vw - 2 * var(--space-4)));
+  max-height: min(720px, calc(100dvh - 2 * var(--space-4)));
+  padding: 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  color: var(--color-text);
+  box-shadow: 0 12px 40px rgb(0 0 0 / 0.3);
+}
+
+.about-dialog::backdrop {
+  background: rgb(0 0 0 / 0.45);
+}
+
+.about-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  font-size: 0.8125rem;
+  text-align: left;
+}
+
+.about-panel p,
+.about-panel h2,
+.about-panel h3 {
+  margin: 0;
+}
+
+.about-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.about-title {
+  font-size: 1.125rem;
+}
+
+.about-close {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.about-close:hover {
+  color: var(--color-text);
+}
+
+.about-stats {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.about-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--color-border);
+}
+
+.about-stat-name {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 0.875rem;
+}
+
+.about-pill {
+  padding: 0 var(--space-2);
+  border-radius: 999px;
+  background: var(--pill);
+  color: var(--pill-text);
+  font-size: 0.6875rem;
+}
+
+.about-stat-summary {
+  color: var(--color-text-muted);
+}
+
+.about-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: var(--space-1) 0 0;
+}
+
+.about-input {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.about-input dd {
+  margin: 0;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.about-contact {
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--color-border);
+}
+
+.about-contact a {
+  color: var(--color-focus);
+}
