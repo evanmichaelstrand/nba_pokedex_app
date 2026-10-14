@@ -9,12 +9,15 @@
   flex: none;
   width: 20px;
   height: 20px;
+  /* Overhang the line box so logos never make the text line taller. */
+  margin-block: -3px;
   object-fit: contain;
 }
 
 .team-label[data-size='small'] .team-label-logo {
   width: 14px;
   height: 14px;
+  margin-block: -1px;
 }
 
 .team-label-dot {

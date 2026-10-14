@@ -112,8 +112,18 @@ async function touchSwipe(page: Page, dx: number, holdMs = 0) {
 
 test('every entry renders fully and fits the viewport', async ({ page }) => {
   test.setTimeout(120_000)
-  // Images are irrelevant here and the NBA CDN rejects headless browsers.
-  await page.route(/cdn\.nba\.com|githubusercontent\.com/, (route) => route.abort())
+  // The NBA CDN rejects headless browsers, so serve stand-in images: every image (logos included)
+  // must load for the layout to take its real size.
+  const png = Buffer.from(
+    'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=',
+    'base64',
+  )
+  const svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><circle cx="5" cy="5" r="5"/></svg>'
+  await page.route(/cdn\.nba\.com|githubusercontent\.com/, (route) =>
+    route.request().url().endsWith('.svg')
+      ? route.fulfill({ body: svg, contentType: 'image/svg+xml' })
+      : route.fulfill({ body: png, contentType: 'image/png' }),
+  )
   await page.goto('/')
   await expect(position(page)).toBeVisible()
   const total = Number((await position(page).textContent())!.split('/')[1].trim())

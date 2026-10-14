@@ -1,6 +1,8 @@
+import type { CSSProperties } from 'react'
 import type { Entry } from '../data'
 import { formatPokemonName } from '../lib/format'
 import { pokemonSpriteUrls } from '../lib/images'
+import { getTeam } from '../lib/teams'
 import { useMediaQuery } from '../hooks/useMediaQuery'
 import { FallbackImage } from './FallbackImage'
 import './PeekCard.css'
@@ -15,7 +17,11 @@ interface PeekCardProps {
 export function PeekCard({ entry, side }: PeekCardProps) {
   const animated = !useMediaQuery('(prefers-reduced-motion: reduce)')
   return (
-    <div className="peek-card" data-side={side}>
+    <div
+      className="peek-card"
+      data-side={side}
+      style={{ '--team-color': getTeam(entry.player.mainTeam).color } as CSSProperties}
+    >
       <FallbackImage className="peek-image" sources={pokemonSpriteUrls(entry.pokemon.id, animated)} alt="" />
       <p className="peek-name">{entry.player.name}</p>
       <p className="peek-pokemon">{formatPokemonName(entry.pokemon.name)}</p>

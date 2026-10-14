@@ -24,9 +24,13 @@ export function EntryCard({ entry, statScaleMax }: EntryCardProps) {
   const animated = !useMediaQuery('(prefers-reduced-motion: reduce)')
 
   return (
-    <article className="entry" aria-label={`${player.name}: ${pokemonName}`}>
+    <article
+      className="entry"
+      aria-label={`${player.name}: ${pokemonName}`}
+      style={{ '--team-color': team.color } as CSSProperties}
+    >
       <div className="entry-matchup">
-        <section className="entry-side" style={{ '--team-color': team.color } as CSSProperties}>
+        <section className="entry-side">
           <div className="entry-image-frame entry-image-frame-player">
             <FallbackImage
               className="entry-image"
