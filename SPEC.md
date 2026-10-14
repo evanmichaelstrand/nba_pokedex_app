@@ -287,7 +287,7 @@ Likely future features, for context only (not in scope): multiple seasons, the "
 - Swipe handling: pointer events in a small custom hook, or a lightweight gesture library if it's clearly simpler. No heavy carousel libraries.
 - **Vitest** for unit tests (CSV parsing, team parsing, name formatting, rotation math, search matching, sort order, URL state)
 - **Playwright** for one or two end-to-end smoke tests (loads, navigates, logo rotates, search narrows the deck)
-- **Deploy:** static hosting. Prefer a host that can also run serverless functions later (Vercel or Netlify) so adding a backend doesn't require moving hosts.
+- **Deploy:** static hosting on Netlify (`netlify.toml`), which can also run serverless functions later, so adding a backend doesn't require moving hosts.
 
 ## Repo layout
 
@@ -326,9 +326,11 @@ These may come later; the code should not prevent them, but don't build toward t
 
 Decide these before or during planning:
 
-1. **Hosting:** Vercel or Netlify (recommended, since both can host a backend later), or GitHub Pages? Not decided yet. A custom domain is likely.
+None right now.
 
 Resolved:
+- Hosting: **Netlify**, deploying from `main` on GitHub, at **nbapokedex.com** (registered with Cloudflare, so DNS stays on Cloudflare and points to Netlify). Build settings live in `netlify.toml`. Netlify can add serverless functions when the backend comes.
+- Legal: the site is non-commercial (no ads, donations, or sales). The owner accepts the remaining trademark and image risk; the footer states it's unofficial and unaffiliated.
 - Entry order: Pokémon ID by default, user-selectable via F6.
 - Deep links: yes, see F7.
 - Visual direction: matches the @nbapokedex social posts (see "Visual design"): stat colors, both chart views with a toggle, player/Pokémon colors, Courier Prime, team tint, light gray graph paper (40px grid, 200px major lines with nodes) instead of the posts' cream, match-quality gauge, and dark mode. The faded player photo and sprite-in-ring are not planned.

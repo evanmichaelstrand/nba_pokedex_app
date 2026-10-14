@@ -47,4 +47,8 @@ Work one item at a time; check it off and commit when done (lint, unit tests, an
   - [x] Graph-paper background, match-quality gauge, surnames in charts (faded player photo and sprite-in-ring not planned)
   - [x] Final contrast, focus, and mobile/desktop check (both themes; axe plus rendered-pixel contrast; every tab stop has visible focus)
 - [x] 13. **E2E smoke tests** — loads, navigates, logo rotates, search narrows the deck, URL round-trips. Plus: 3D deck (neighbors visible, inert, reduced-motion flat), tiny filtered decks, alt text, keyboard-only use with visible focus, and an error-free full session.
-- [ ] 14. **Deploy config** — *blocked on hosting choice (Open question 1; a custom domain is likely).* Bundle-size check (< 150 KB gzipped; currently about 89 KB).
+- [ ] 14. **Deploy** — Netlify, at nbapokedex.com (DNS on Cloudflare).
+  - [x] `netlify.toml`: build command, Node version, cache rules, security headers
+  - [x] Clean-clone build check; bundle-size check (< 150 KB gzipped; currently about 91 KB)
+  - [ ] Connect the GitHub repo to Netlify and deploy (owner)
+  - [ ] Add nbapokedex.com in Netlify and point Cloudflare DNS at it (owner); confirm HTTPS

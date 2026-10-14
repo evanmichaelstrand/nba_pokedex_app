@@ -1,0 +1,37 @@
+# Netlify build and hosting settings. The site is static; deep links use hash URLs
+# (#/player/…), so no SPA redirect rules are needed.
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  # Match local development (Vite 8 needs Node 20.19+ or 22.12+).
+  NODE_VERSION = "24"
+
+# Basic hardening for every response.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), interest-cohort=()"
+
+# Vite's hashed bundles never change under the same name: cache them for a year.
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Fonts are versioned by hand and rarely change.
+[[headers]]
+  for = "/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=2592000"
+
+# The data file is replaced in place each season (and after manual edits): always revalidate.
+[[headers]]
+  for = "/data/*"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
