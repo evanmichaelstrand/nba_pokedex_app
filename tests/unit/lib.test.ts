@@ -7,6 +7,7 @@ import {
   formatMatchPercent,
   formatPokemonName,
   formatTypeName,
+  shortPlayerName,
 } from '../../src/lib/format'
 import { PLACEHOLDER_IMAGE_URL, pokemonArtworkUrl } from '../../src/lib/images'
 
@@ -85,5 +86,21 @@ describe('image URLs', () => {
 
   it('has an inline placeholder', () => {
     expect(PLACEHOLDER_IMAGE_URL).toMatch(/^data:image\/svg\+xml,/)
+  })
+})
+
+describe('shortPlayerName', () => {
+  it.each([
+    ['Austin Reaves', 'Reaves'],
+    ['Jaren Jackson Jr.', 'Jackson'],
+    ['Jimmy Butler III', 'Butler'],
+    ['Gary Payton II', 'Payton'],
+    ['Tristan da Silva', 'da Silva'],
+    ['Shai Gilgeous-Alexander', 'Gilgeous-Alexander'],
+    ['Nikola Jokić', 'Jokić'],
+    ['Nenê', 'Nenê'],
+    ['  LeBron   James ', 'James'],
+  ])('%s → %s', (name, expected) => {
+    expect(shortPlayerName(name)).toBe(expected)
   })
 })

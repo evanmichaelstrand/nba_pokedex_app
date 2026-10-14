@@ -73,6 +73,21 @@ export function formatPokemonName(slug: string): string {
   return [PREFIX_FORMS[parts[formIndex]], baseName, variant && titleCase(variant)].filter(Boolean).join(' ')
 }
 
+const NAME_SUFFIX = /^(jr|sr)\.?$|^(ii|iii|iv|v)$/i
+
+/**
+ * Compact player name for tight spots like chart legends: the surname without generational suffixes,
+ * keeping lowercase particles. "Jaren Jackson Jr." → "Jackson", "Tristan da Silva" → "da Silva".
+ */
+export function shortPlayerName(fullName: string): string {
+  const words = fullName.trim().split(/\s+/)
+  while (words.length > 1 && NAME_SUFFIX.test(words[words.length - 1])) words.pop()
+  const surname = [words.pop() ?? '']
+  // Particles like "da", "van", "de" belong to the surname.
+  while (words.length > 1 && /^[a-z]/.test(words[words.length - 1])) surname.unshift(words.pop()!)
+  return surname.join(' ')
+}
+
 /** "#121", or null for form IDs (which aren't Dex numbers). */
 export function formatDexNumber(pokemonId: number): string | null {
   return pokemonId > FORM_ID_THRESHOLD ? null : `#${pokemonId}`

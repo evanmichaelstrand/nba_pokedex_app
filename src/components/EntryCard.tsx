@@ -3,7 +3,7 @@ import { SEASON } from '../config'
 import type { Entry } from '../data'
 import type { ChartMode } from '../hooks/useChartMode'
 import { useMediaQuery } from '../hooks/useMediaQuery'
-import { formatDexNumber, formatMatchPercent, formatPokemonName } from '../lib/format'
+import { formatDexNumber, formatMatchPercent, formatPokemonName, shortPlayerName } from '../lib/format'
 import { playerHeadshotUrls, pokemonSpriteUrls } from '../lib/images'
 import { pokemonSeriesColor } from '../lib/seriesColors'
 import { getTeam } from '../lib/teams'
@@ -101,7 +101,7 @@ export function EntryCard({
         onModeChange={onChartModeChange}
         playerColor={team.color}
         pokemonColor={pokemonSeriesColor(team.color)}
-        playerName={player.name}
+        playerName={shortPlayerName(player.name)}
         pokemonName={pokemonName}
         playerStats={player.stats}
         pokemonStats={pokemon.stats}
