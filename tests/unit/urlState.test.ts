@@ -20,7 +20,9 @@ describe('parseHash', () => {
 
   it('accepts search and sort without a player', () => {
     expect(parseHash('#/?q=mega')).toEqual({ ...defaults, query: 'mega' })
-    expect(parseHash('#?sort=type')).toEqual({ ...defaults, sort: 'type' })
+    expect(parseHash('#?sort=playerBst')).toEqual({ ...defaults, sort: 'playerBst' })
+    // Retired sort keys from old links fall back to the default.
+    expect(parseHash('#?sort=type').sort).toBe('pokemonId')
   })
 
   it('tolerates a trailing slash and a missing leading slash', () => {
@@ -50,7 +52,7 @@ describe('buildHash', () => {
   })
 
   it('round-trips through parseHash', () => {
-    const view = { playerId: 42, query: 'Nikola Jokić & co', sort: 'type' as const }
+    const view = { playerId: 42, query: 'Nikola Jokić & co', sort: 'pokemonBst' as const }
     expect(parseHash(buildHash(view))).toEqual(view)
   })
 })

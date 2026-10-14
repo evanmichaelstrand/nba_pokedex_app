@@ -37,23 +37,23 @@ test('search and non-default sort go into the URL; defaults stay out', async ({ 
 })
 
 test('a shared link restores entry, search, and sort', async ({ page }) => {
-  await open(page, '/#/player/2?q=lakers&sort=type')
+  await open(page, '/#/player/2?q=lakers&sort=playerBst')
   await expect(playerName(page)).toHaveText('LeBron James')
   await expect(page.getByRole('searchbox')).toHaveValue('lakers')
-  await expect(page.getByRole('combobox', { name: 'Sort by' })).toHaveValue('type')
+  await expect(page.getByRole('combobox', { name: 'Sort by' })).toHaveValue('playerBst')
   await expect(position(page)).toHaveText(at(2, 2))
 })
 
 test('reloading keeps the same view', async ({ page }) => {
   await open(page)
   await page.keyboard.press('ArrowLeft')
-  await page.getByRole('combobox', { name: 'Sort by' }).selectOption('type')
+  await page.getByRole('combobox', { name: 'Sort by' }).selectOption('team')
   await expect(playerName(page)).toHaveText('Traded Guy')
   // The URL catches up within a moment (writes are throttled).
-  await expect.poll(() => hash(page)).toBe('#/player/3?sort=type')
+  await expect.poll(() => hash(page)).toBe('#/player/3?sort=team')
   await page.reload()
   await expect(playerName(page)).toHaveText('Traded Guy')
-  await expect(page.getByRole('combobox', { name: 'Sort by' })).toHaveValue('type')
+  await expect(page.getByRole('combobox', { name: 'Sort by' })).toHaveValue('team')
 })
 
 test('unknown player IDs and sorts fall back to defaults', async ({ page }) => {

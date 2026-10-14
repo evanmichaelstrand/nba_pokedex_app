@@ -44,15 +44,14 @@ describe('sortEntries', () => {
     expect(ids(sortEntries(input, 'team'))).toEqual([2, 1])
   })
 
-  it('sorts by primary type, then secondary (single-type first), then Pokémon ID', () => {
-    const input = [
-      entry({ id: 1, pokemonId: 9, types: ['water', 'ice'] }),
-      entry({ id: 2, pokemonId: 8, types: ['water'] }),
-      entry({ id: 3, pokemonId: 7, types: ['fire', 'flying'] }),
-      entry({ id: 4, pokemonId: 6, types: ['water', 'dark'] }),
-      entry({ id: 5, pokemonId: 1, types: ['water'] }),
-    ]
-    expect(ids(sortEntries(input, 'type'))).toEqual([3, 5, 2, 4, 1])
+  it('sorts by player or Pokémon base stat total, highest first, then Pokémon ID', () => {
+    const withTotals = (id: number, pokemonId: number, playerBst: number, pokemonBst: number): Entry => {
+      const e = entry({ id, pokemonId })
+      return { ...e, player: { ...e.player, baseStatTotal: playerBst }, pokemon: { ...e.pokemon, baseStatTotal: pokemonBst } }
+    }
+    const input = [withTotals(1, 30, 400, 600), withTotals(2, 20, 550, 300), withTotals(3, 10, 400, 450)]
+    expect(ids(sortEntries(input, 'playerBst'))).toEqual([2, 3, 1])
+    expect(ids(sortEntries(input, 'pokemonBst'))).toEqual([1, 3, 2])
   })
 
   it('sorts by position with missing positions last', () => {
@@ -68,7 +67,7 @@ describe('sortEntries', () => {
 
 describe('availableSortKeys', () => {
   it('hides Position until some entry has one', () => {
-    expect(availableSortKeys([entry({ id: 1, pokemonId: 1 })])).toEqual(['pokemonId', 'team', 'type'])
+    expect(availableSortKeys([entry({ id: 1, pokemonId: 1 })])).toEqual(['pokemonId', 'team', 'playerBst', 'pokemonBst'])
     expect(availableSortKeys([entry({ id: 1, pokemonId: 1, position: 'G' })])).toContain('position')
   })
 })

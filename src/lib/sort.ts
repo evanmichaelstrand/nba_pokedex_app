@@ -1,14 +1,15 @@
 import type { Entry } from '../data'
 import { getTeam } from './teams'
 
-export type SortKey = 'pokemonId' | 'team' | 'type' | 'position'
+export type SortKey = 'pokemonId' | 'team' | 'playerBst' | 'pokemonBst' | 'position'
 
 export const DEFAULT_SORT: SortKey = 'pokemonId'
 
 export const SORT_LABELS: Readonly<Record<SortKey, string>> = {
   pokemonId: 'Pokémon ID',
   team: 'NBA team',
-  type: 'Pokémon type',
+  playerBst: 'Player BST',
+  pokemonBst: 'Pokémon BST',
   position: 'Position',
 }
 
@@ -35,11 +36,9 @@ const COMPARATORS: Readonly<Record<SortKey, (a: Entry, b: Entry) => number>> = {
   pokemonId: byPokemonId,
   // By full team name; unknown abbreviations fall back to the abbreviation itself.
   team: (a, b) => text(getTeam(a.player.mainTeam).name, getTeam(b.player.mainTeam).name) || byPokemonId(a, b),
-  // Primary type, then secondary (single-type first), then ID.
-  type: (a, b) =>
-    text(a.pokemon.primaryType, b.pokemon.primaryType) ||
-    text(a.pokemon.secondaryType ?? '', b.pokemon.secondaryType ?? '') ||
-    byPokemonId(a, b),
+  // Base stat totals sort highest first.
+  playerBst: (a, b) => b.player.baseStatTotal - a.player.baseStatTotal || byPokemonId(a, b),
+  pokemonBst: (a, b) => b.pokemon.baseStatTotal - a.pokemon.baseStatTotal || byPokemonId(a, b),
   position: (a, b) => optionalText(a.player.position, b.player.position) || byPokemonId(a, b),
 }
 

@@ -43,16 +43,40 @@ test('sorts by team name', async ({ page }) => {
   expect(await deckOrder(page)).toEqual(['Traded Guy', 'Nikola Jokić', 'Another Laker', 'LeBron James'])
 })
 
-test('sorts by Pokémon type', async ({ page }) => {
-  await load(page, fixture)
-  await sortSelect(page).selectOption('type')
-  // electric, ice, normal, rock.
-  expect(await deckOrder(page)).toEqual(['Another Laker', 'LeBron James', 'Nikola Jokić', 'Traded Guy'])
+/** The fixture with each row given its own player and Pokémon base stat totals. */
+function withTotals(totals: Array<[number, number]>): string {
+  const [header, ...rows] = fixture.trim().split('\n')
+  const cols = header.split(',')
+  const player = cols.indexOf('base_stat_total')
+  const pokemon = cols.indexOf('pokemon_base_stat_total')
+  return [
+    header,
+    ...rows.map((row, i) => {
+      const cells = row.split(',')
+      ;[cells[player], cells[pokemon]] = totals[i].map(String)
+      return cells.join(',')
+    }),
+  ].join('\n')
+}
+
+// Rows: Jokić, LeBron, Traded Guy, Another Laker.
+const TOTALS: Array<[number, number]> = [[500, 450], [600, 300], [400, 700], [550, 600]]
+
+test('sorts by player BST, highest first', async ({ page }) => {
+  await load(page, withTotals(TOTALS))
+  await sortSelect(page).selectOption('playerBst')
+  expect(await deckOrder(page)).toEqual(['LeBron James', 'Another Laker', 'Nikola Jokić', 'Traded Guy'])
+})
+
+test('sorts by Pokémon BST, highest first', async ({ page }) => {
+  await load(page, withTotals(TOTALS))
+  await sortSelect(page).selectOption('pokemonBst')
+  expect(await deckOrder(page)).toEqual(['Traded Guy', 'Another Laker', 'Nikola Jokić', 'LeBron James'])
 })
 
 test('hides Position until the data has positions', async ({ page }) => {
   await load(page, fixture)
-  await expect(sortSelect(page).locator('option')).toHaveText(['Pokémon ID', 'NBA team', 'Pokémon type'])
+  await expect(sortSelect(page).locator('option')).toHaveText(['Pokémon ID', 'NBA team', 'Player BST', 'Pokémon BST'])
 })
 
 test('sorts by position once the column exists', async ({ page }) => {
@@ -75,7 +99,7 @@ test('keeps the current entry and does not rotate the logo', async ({ page }) =>
 
 test('combines with search', async ({ page }) => {
   await load(page, fixture)
-  await sortSelect(page).selectOption('type')
+  await sortSelect(page).selectOption('team')
   await page.getByRole('searchbox').fill('lakers')
   expect(await deckOrder(page)).toEqual(['Another Laker', 'LeBron James'])
 })

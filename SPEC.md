@@ -159,12 +159,12 @@ Done when: searching by each of player, Pokémon, main team, and other team narr
 
 ### F6 — Sort
 
-- Sort options: **Pokémon ID** (default), **NBA team**, **Pokémon type**, **Position**.
+- Sort options: **Pokémon ID** (default), **NBA team**, **Player BST**, **Pokémon BST**, **Position**.
   - **Pokémon ID:** ascending.
   - **NBA team:** by `main_team` full name (Atlanta Hawks → Washington Wizards); unknown abbreviations sort by the abbreviation; ties by Pokémon ID.
-  - **Pokémon type:** by primary type, then secondary type (single-type first), then Pokémon ID.
+  - **Player BST / Pokémon BST:** by `base_stat_total` / `pokemon_base_stat_total`, **highest first**, then Pokémon ID.
   - **Position:** by position, then Pokémon ID. **Only shown when at least one entry has a position**, so it appears automatically once the pipeline adds the column.
-- Ascending only; no reverse toggle.
+- Fixed direction per option (BST highest first, others ascending); no reverse toggle.
 
 ### F7 — Deck changes and URL state
 
