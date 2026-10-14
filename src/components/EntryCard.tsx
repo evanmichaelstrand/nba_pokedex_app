@@ -1,12 +1,13 @@
-import type { CSSProperties } from 'react'
+import { Fragment, type CSSProperties } from 'react'
 import { SEASON } from '../config'
 import type { Entry } from '../data'
+import { useMediaQuery } from '../hooks/useMediaQuery'
 import { formatDexNumber, formatMatchPercent, formatPokemonName } from '../lib/format'
 import { playerHeadshotUrls, pokemonSpriteUrls } from '../lib/images'
 import { getTeam } from '../lib/teams'
-import { useMediaQuery } from '../hooks/useMediaQuery'
 import { FallbackImage } from './FallbackImage'
 import { StatBars } from './StatBars'
+import { TeamLabel } from './TeamLabel'
 import { TypeBadge } from './TypeBadge'
 import './EntryCard.css'
 
@@ -18,7 +19,6 @@ interface EntryCardProps {
 export function EntryCard({ entry, statScaleMax }: EntryCardProps) {
   const { player, pokemon } = entry
   const team = getTeam(player.mainTeam)
-  const otherTeams = player.otherTeams.map((t) => getTeam(t).name)
   const pokemonName = formatPokemonName(pokemon.name)
   const dexNumber = formatDexNumber(pokemon.id)
   const animated = !useMediaQuery('(prefers-reduced-motion: reduce)')
@@ -37,8 +37,20 @@ export function EntryCard({ entry, statScaleMax }: EntryCardProps) {
             />
           </div>
           <h2 className="entry-name">{player.name}</h2>
-          <p className="entry-team">{team.name}</p>
-          {otherTeams.length > 0 && <p className="entry-detail">Also played for: {otherTeams.join(', ')}</p>}
+          <p className="entry-team">
+            <TeamLabel abbreviation={player.mainTeam} />
+          </p>
+          {player.otherTeams.length > 0 && (
+            <p className="entry-detail">
+              Also played for:{' '}
+              {player.otherTeams.map((abbr, i) => (
+                <Fragment key={abbr}>
+                  {i > 0 && ', '}
+                  <TeamLabel abbreviation={abbr} size="small" />
+                </Fragment>
+              ))}
+            </p>
+          )}
         </section>
 
         <section className="entry-side">

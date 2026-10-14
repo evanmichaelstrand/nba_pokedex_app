@@ -89,6 +89,19 @@ test('season headshots are tried first', async ({ page }) => {
   expect(requested.some((url) => /\/headshots\/nba\/\d+\/\d{4}\/1040x760\//.test(url))).toBe(true)
 })
 
+test('team names show team logos, or a color dot if the logo fails', async ({ page }) => {
+  const svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><circle cx="5" cy="5" r="5"/></svg>'
+  await page.route('https://cdn.nba.com/logos/**', (route) => route.fulfill({ body: svg, contentType: 'image/svg+xml' }))
+  await page.goto('/')
+  await expect(card(page).locator('.entry-team .team-label-logo')).toBeVisible()
+
+  await page.unroute('https://cdn.nba.com/logos/**')
+  await page.route('https://cdn.nba.com/logos/**', (route) => route.fulfill({ status: 404 }))
+  await page.reload()
+  await expect(card(page).locator('.entry-team .team-label-dot')).toBeVisible()
+  await expect(card(page).locator('.entry-team img')).toHaveCount(0)
+})
+
 test('failed images fall back to a placeholder', async ({ page }) => {
   await page.route('https://cdn.nba.com/**', (route) => route.fulfill({ status: 404 }))
   await page.goto('/')

@@ -18,6 +18,12 @@ export function playerHeadshotUrls(playerId: number, teams: readonly string[], s
   return [...seasonal, `${NBA_CDN}/headshots/nba/latest/1040x760/${playerId}.png`]
 }
 
+/** Team logo SVG, or null for teams without an NBA.com ID. */
+export function teamLogoUrl(abbreviation: string): string | null {
+  const teamId = getTeam(abbreviation).id
+  return teamId ? `${NBA_CDN}/logos/nba/${teamId}/primary/L/logo.svg` : null
+}
+
 export function pokemonArtworkUrl(pokemonId: number): string {
   return `${POKEAPI_SPRITES}/other/official-artwork/${pokemonId}.png`
 }

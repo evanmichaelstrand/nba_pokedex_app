@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { playerHeadshotUrls, pokemonSpriteUrls } from '../../src/lib/images'
+import { playerHeadshotUrls, pokemonSpriteUrls, teamLogoUrl } from '../../src/lib/images'
 import { parseSeason } from '../../src/lib/season'
 
 describe('parseSeason', () => {
@@ -43,5 +43,12 @@ describe('pokemonSpriteUrls', () => {
     expect(pokemonSpriteUrls(614, false)).toEqual([
       'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/614.png',
     ])
+  })
+})
+
+describe('teamLogoUrl', () => {
+  it('builds NBA.com logo URLs for known teams only', () => {
+    expect(teamLogoUrl('LAL')).toBe('https://cdn.nba.com/logos/nba/1610612747/primary/L/logo.svg')
+    expect(teamLogoUrl('XYZ')).toBeNull()
   })
 })

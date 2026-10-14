@@ -1,0 +1,26 @@
+.team-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  white-space: nowrap;
+}
+
+.team-label-logo {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+.team-label[data-size='small'] .team-label-logo {
+  width: 14px;
+  height: 14px;
+}
+
+.team-label-dot {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--team-color);
+}

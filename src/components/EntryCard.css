@@ -31,7 +31,7 @@
   width: 100%;
   aspect-ratio: 1040 / 760;
   /* Keeps short desktop windows from scrolling; images letterbox via object-fit. */
-  max-height: 18dvh;
+  max-height: 17dvh;
   border-radius: calc(var(--radius) - 4px);
   background: var(--color-bg);
   overflow: hidden;
@@ -62,16 +62,6 @@
   font-weight: 600;
 }
 
-.entry-team::before {
-  content: '';
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  margin-right: var(--space-1);
-  border-radius: 50%;
-  background: var(--team-color);
-  vertical-align: 1px;
-}
 
 .entry-detail {
   margin: 0;
