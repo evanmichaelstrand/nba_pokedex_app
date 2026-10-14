@@ -29,5 +29,5 @@ Work one item at a time; check it off and commit when done (lint, unit tests, an
 ## Finish
 
 - [ ] 12. **Visual design pass** — *blocked on visual direction (Open question 1).* Apply chosen style, check contrast over the logo, focus states, mobile + desktop.
-- [ ] 13. **E2E smoke tests** — loads, navigates, logo rotates, search narrows the deck, URL round-trips.
+- [x] 13. **E2E smoke tests** — loads, navigates, logo rotates, search narrows the deck, URL round-trips. Plus: 3D deck (neighbors visible, inert, reduced-motion flat), tiny filtered decks, alt text, keyboard-only use with visible focus, and an error-free full session.
 - [ ] 14. **Deploy config** — *blocked on hosting choice (Open question 2).* Bundle-size check (< 150 KB gzipped).

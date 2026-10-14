@@ -14,6 +14,31 @@ test('app loads and shows an entry', async ({ page }) => {
   await expect(card(page).getByRole('listitem')).toHaveCount(6)
 })
 
+test('a full session runs without JavaScript errors', async ({ page }) => {
+  const errors: string[] = []
+  page.on('pageerror', (error) => errors.push(error.message))
+  page.on('console', (message) => {
+    // Image hosts can refuse headless browsers; the placeholder covers that, so it's not an app error.
+    if (message.type() === 'error' && !message.text().startsWith('Failed to load resource')) {
+      errors.push(message.text())
+    }
+  })
+
+  await page.goto('/')
+  await expect(card(page)).toBeVisible()
+  for (let i = 0; i < 5; i++) await page.keyboard.press('ArrowRight')
+  await page.getByRole('button', { name: 'Previous entry' }).click()
+  await page.getByRole('searchbox').fill('a')
+  await page.getByRole('combobox', { name: 'Sort by' }).selectOption('team')
+  await page.getByRole('searchbox').fill('zzzz')
+  await expect(page.getByText('No matches')).toBeVisible()
+  await page.getByRole('button', { name: 'Clear search' }).last().click()
+  await page.reload()
+  await expect(card(page)).toBeVisible()
+
+  expect(errors).toEqual([])
+})
+
 test('entry fits one viewport without vertical scrolling', async ({ page }) => {
   await page.goto('/')
   await expect(card(page)).toBeVisible()
