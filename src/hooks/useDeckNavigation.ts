@@ -13,8 +13,8 @@ interface Position {
  * When the deck changes (search/sort), the current entry stays if it's still in the deck; otherwise
  * the first entry becomes current. Deck changes never count as steps.
  */
-export function useDeckNavigation(deck: readonly Entry[]) {
-  const [position, setPosition] = useState<Position>({ id: null, netSteps: 0 })
+export function useDeckNavigation(deck: readonly Entry[], initialId: number | null = null) {
+  const [position, setPosition] = useState<Position>({ id: initialId, netSteps: 0 })
   const [previousDeck, setPreviousDeck] = useState(deck)
   const index = indexOfId(deck, position.id)
   const current = deck[index] as Entry | undefined

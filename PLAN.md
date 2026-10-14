@@ -24,7 +24,7 @@ Work one item at a time; check it off and commit when done (lint, unit tests, an
 
 - [x] 9. **Search (F5)** — pure matching function (player, Pokémon display name, main + other team name/abbr), SearchBar, "Filtered" chip with clear, "No matches" state. Unit tests.
 - [x] 10. **Sort (F6)** — pure comparators (Pokémon ID, team, type, position), SortSelect; Position option hidden when no entry has a position. Unit tests.
-- [ ] 11. **Deck changes + URL state (F7)** — stay on current entry if still in deck, else first; no rotation on search/sort change; hash URL `#/player/{id}?q=…&sort=…` parse/serialize with fallbacks. Unit tests.
+- [x] 11. **Deck changes + URL state (F7)** — stay on current entry if still in deck, else first; no rotation on search/sort change; hash URL `#/player/{id}?q=…&sort=…` parse/serialize with fallbacks. Unit tests.
 
 ## Finish
 

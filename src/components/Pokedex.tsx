@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import type { Entry } from '../data'
 import { useArrowKeys } from '../hooks/useArrowKeys'
 import { useDeckNavigation } from '../hooks/useDeckNavigation'
+import { useWriteHash } from '../hooks/useHashView'
 import { usePreloadImages } from '../hooks/usePreloadImages'
 import { playerHeadshotUrl, pokemonArtworkUrl } from '../lib/images'
 import { filterEntries } from '../lib/search'
@@ -15,17 +16,20 @@ import { NoMatches } from './NoMatches'
 
 interface PokedexProps {
   entries: Entry[]
+  /** Player to open on (from a shared link); falls back to the first entry if absent. */
+  initialPlayerId: number | null
   query: string
   sort: SortKey
   onClearQuery: () => void
 }
 
-export function Pokedex({ entries, query, sort, onClearQuery }: PokedexProps) {
+export function Pokedex({ entries, initialPlayerId, query, sort, onClearQuery }: PokedexProps) {
   const deck = useMemo(() => sortEntries(filterEntries(entries, query), sort), [entries, query, sort])
   // Scale comes from the full dataset so bars mean the same thing whatever the filter.
   const scaleMax = useMemo(() => statScaleMax(entries), [entries])
-  const { index, current, netSteps, next, previous } = useDeckNavigation(deck)
+  const { index, current, netSteps, next, previous } = useDeckNavigation(deck, initialPlayerId)
   useArrowKeys(previous, next)
+  useWriteHash({ playerId: current?.id ?? null, query, sort })
 
   // Warm the cache for everything the next few moves can bring into focus.
   const ahead = [1, -1, 2, -2, 3, -3].map((o) => deck[(((index + o) % deck.length) + deck.length) % deck.length])
