@@ -172,6 +172,23 @@ Done when: searching by each of player, Pokémon, main team, and other team narr
 
 Done when: reloading or opening a shared URL restores the same entry, search, and sort.
 
+## Visual design
+
+The look follows the @nbapokedex social posts.
+
+### Stat colors
+
+Each stat has one color, used everywhere that stat appears (chart bars, labels, legends). Define them once as CSS custom properties.
+
+| Stat | Hex |
+|---|---|
+| HP | `#448f0c` |
+| Attack | `#efcc18` |
+| Defense | `#e86412` |
+| Special Attack | `#14c3f1` |
+| Special Defense | `#4a6adf` |
+| Speed | `#d51dad` |
+
 ## Future backend readiness
 
 A backend (API + database) is likely in a later version. **Don't build any of it now**, but structure the base version so adding it only means writing a new data source, not touching the UI.
@@ -238,7 +255,7 @@ These may come later; the code should not prevent them, but don't build toward t
 
 Decide these before or during planning:
 
-1. **Visual direction:** classic red Pokédex device, trading-card style matching my social posts, or something else? (I'll share a reference screenshot of a post.)
+1. **Visual direction:** match the @nbapokedex social posts (reference post shared; stat colors recorded under "Visual design"). Still to decide: chart style on the card, player/Pokémon colors, font, and whether to keep the team tint.
 2. **Hosting:** Vercel or Netlify (recommended, since both can host a backend later), or GitHub Pages? Custom domain?
 3. **Image hosting:** keep hot-linking NBA and PokéAPI images, or download and serve them myself for reliability?
 
