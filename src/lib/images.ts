@@ -22,6 +22,12 @@ export function pokemonArtworkUrl(pokemonId: number): string {
   return `${POKEAPI_SPRITES}/other/official-artwork/${pokemonId}.png`
 }
 
+/** Sprite URLs to try in order: the animated Showdown sprite (unless motion is off), then official artwork. */
+export function pokemonSpriteUrls(pokemonId: number, animated: boolean): string[] {
+  const artwork = pokemonArtworkUrl(pokemonId)
+  return animated ? [`${POKEAPI_SPRITES}/other/showdown/${pokemonId}.gif`, artwork] : [artwork]
+}
+
 /** Neutral silhouette shown when an image fails to load. Inline so it can never fail itself. */
 export const PLACEHOLDER_IMAGE_URL =
   'data:image/svg+xml,' +

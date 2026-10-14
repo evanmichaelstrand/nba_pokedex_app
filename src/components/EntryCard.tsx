@@ -2,8 +2,9 @@ import type { CSSProperties } from 'react'
 import { SEASON } from '../config'
 import type { Entry } from '../data'
 import { formatDexNumber, formatMatchPercent, formatPokemonName } from '../lib/format'
-import { playerHeadshotUrls, pokemonArtworkUrl } from '../lib/images'
+import { playerHeadshotUrls, pokemonSpriteUrls } from '../lib/images'
 import { getTeam } from '../lib/teams'
+import { useMediaQuery } from '../hooks/useMediaQuery'
 import { FallbackImage } from './FallbackImage'
 import { StatBars } from './StatBars'
 import { TypeBadge } from './TypeBadge'
@@ -20,6 +21,7 @@ export function EntryCard({ entry, statScaleMax }: EntryCardProps) {
   const otherTeams = player.otherTeams.map((t) => getTeam(t).name)
   const pokemonName = formatPokemonName(pokemon.name)
   const dexNumber = formatDexNumber(pokemon.id)
+  const animated = !useMediaQuery('(prefers-reduced-motion: reduce)')
 
   return (
     <article className="entry" aria-label={`${player.name}: ${pokemonName}`}>
@@ -43,7 +45,7 @@ export function EntryCard({ entry, statScaleMax }: EntryCardProps) {
           <div className="entry-image-frame">
             <FallbackImage
               className="entry-image"
-              sources={[pokemonArtworkUrl(pokemon.id)]}
+              sources={pokemonSpriteUrls(pokemon.id, animated)}
               alt={`${pokemonName} artwork`}
               width={475}
               height={475}

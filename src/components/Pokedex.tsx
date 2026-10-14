@@ -3,9 +3,10 @@ import { SEASON } from '../config'
 import type { Entry } from '../data'
 import { useArrowKeys } from '../hooks/useArrowKeys'
 import { useDeckNavigation } from '../hooks/useDeckNavigation'
+import { useMediaQuery } from '../hooks/useMediaQuery'
 import { useWriteHash } from '../hooks/useHashView'
 import { usePreloadImages } from '../hooks/usePreloadImages'
-import { playerHeadshotUrls, pokemonArtworkUrl } from '../lib/images'
+import { playerHeadshotUrls, pokemonSpriteUrls } from '../lib/images'
 import { filterEntries } from '../lib/search'
 import { sortEntries, type SortKey } from '../lib/sort'
 import { statScaleMax } from '../lib/stats'
@@ -32,12 +33,13 @@ export function Pokedex({ entries, initialPlayerId, query, sort, onClearQuery }:
   useArrowKeys(previous, next)
   useWriteHash({ playerId: current?.id ?? null, query, sort })
 
+  const animated = !useMediaQuery('(prefers-reduced-motion: reduce)')
   // Warm the cache for everything the next few moves can bring into focus.
   const ahead = [1, -1, 2, -2, 3, -3].map((o) => deck[(((index + o) % deck.length) + deck.length) % deck.length])
   // (First choice of each image only; fallbacks are rare and load on demand.)
   usePreloadImages(
     ahead.flatMap((e) =>
-      e ? [playerHeadshotUrls(e.id, [e.player.mainTeam], SEASON?.startYear ?? null)[0], pokemonArtworkUrl(e.pokemon.id)] : [],
+      e ? [playerHeadshotUrls(e.id, [e.player.mainTeam], SEASON?.startYear ?? null)[0], pokemonSpriteUrls(e.pokemon.id, animated)[0]] : [],
     ),
   )
 

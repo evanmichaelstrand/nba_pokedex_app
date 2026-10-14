@@ -30,7 +30,7 @@ Work one item at a time; check it off and commit when done (lint, unit tests, an
 
 - [ ] 11b. **UI feedback, round 1**
   - [x] Season label in header (`VITE_SEASON`) and season-specific headshots with fallbacks
-  - [ ] Animated Pokémon sprites (static under reduced motion, fallback to artwork)
+  - [x] Animated Pokémon sprites (static under reduced motion, fallback to artwork)
   - [ ] Team logos next to team names
   - [ ] Faded team-color tint on the card
   - [ ] Progress slider for quick flipping (F2c)
