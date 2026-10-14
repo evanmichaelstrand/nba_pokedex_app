@@ -10,7 +10,7 @@ Work one item at a time; check it off and commit when done (lint, unit tests, an
 
 - [x] 2. **Entry type + EntrySource** — `Entry` domain type (camelCase, `otherTeams: string[]`, optional `position`, optional supporting stats), `EntrySource` interface, `CsvEntrySource` (column names defined once, row validation, skip + log bad rows), source selection from `import.meta.env`. Unit tests.
 - [x] 3. **lib helpers** — `teams.ts` (30 teams: name + color, unknown passes through), formatting (Pokémon display name incl. "Mega X", Dex number hidden above 10000, match %, height), `images.ts` (URL builders + placeholder). Unit tests.
-- [ ] 4. **useEntries + loading/error states (F4)** — async hook over `EntrySource`; loading view and friendly error view.
+- [x] 4. **useEntries + loading/error states (F4)** — async hook over `EntrySource`; loading view and friendly error view.
 
 ## Entry view and navigation
 
