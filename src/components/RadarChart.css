@@ -33,10 +33,15 @@
   background: var(--key);
 }
 
+.radar-plot {
+  position: relative;
+  width: 100%;
+  max-width: 300px;
+}
+
 .radar-svg {
   display: block;
   width: 100%;
-  max-width: 300px;
   height: auto;
   overflow: visible;
 }
@@ -74,4 +79,31 @@
 .radar-label {
   font-size: 11px;
   font-weight: 700;
+}
+
+.radar-label-button {
+  cursor: pointer;
+  outline: none;
+}
+
+.radar-label-button:hover .radar-pill,
+.radar-label-button[aria-expanded='true'] .radar-pill {
+  stroke: var(--color-text);
+  stroke-width: 1.5;
+}
+
+/* SVG groups don't draw outlines, so the pill shows keyboard focus instead. */
+.radar-label-button:focus-visible .radar-pill {
+  stroke: var(--color-focus);
+  stroke-width: 3;
+}
+
+/* A label-height band at the label's position; the breakdown opens just above or below it. */
+.radar-breakdown-anchor {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 22px;
+  transform: translateY(-50%);
+  pointer-events: none;
 }

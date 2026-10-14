@@ -17,7 +17,7 @@ interface StatChartProps {
   playerColor: string
   pokemonColor: string
   scaleMax: number
-  /** The player's real numbers, for the bar chart's per-stat breakdowns. */
+  /** The player's real numbers, for the per-stat breakdowns. */
   realStats: RealStats
 }
 

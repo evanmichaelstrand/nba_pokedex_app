@@ -1,5 +1,6 @@
-import { useEffect, useId, useRef, useState, type CSSProperties, type KeyboardEvent, type PointerEvent } from 'react'
+import { useId, useRef, type CSSProperties } from 'react'
 import type { RealStats, StatLine } from '../data'
+import { useStatBreakdown } from '../hooks/useStatBreakdown'
 import { statBreakdown } from '../lib/statBreakdown'
 import { barPercent, STAT_ROWS } from '../lib/stats'
 import { StatBreakdownPopover } from './StatBreakdownPopover'
@@ -16,8 +17,6 @@ interface ButterflyChartProps {
   /** The player's real numbers, shown when a row is hovered or tapped. */
   realStats: RealStats
 }
-
-type StatKey = keyof StatLine
 
 /** Values go inside a bar only if it's wide enough to hold them. */
 const INSIDE_MIN_PERCENT = 24
@@ -41,52 +40,7 @@ export function ButterflyChart(props: ButterflyChartProps) {
   const { playerName, pokemonName, playerStats, pokemonStats, scaleMax, realStats } = props
   const idPrefix = useId()
   const rootRef = useRef<HTMLUListElement>(null)
-  // A tap/click pins a breakdown open; mouse hover shows one while pointing.
-  const [pinned, setPinned] = useState<StatKey | null>(null)
-  const [hovered, setHovered] = useState<StatKey | null>(null)
-  const active = pinned ?? hovered
-
-  // A pinned breakdown closes on a tap elsewhere or Escape.
-  useEffect(() => {
-    if (!pinned) return
-    const closeOutside = (event: globalThis.PointerEvent) => {
-      if (!(event.target instanceof Node) || !rootRef.current?.contains(event.target)) setPinned(null)
-    }
-    const closeOnEscape = (event: globalThis.KeyboardEvent) => {
-      if (event.key === 'Escape') setPinned(null)
-    }
-    document.addEventListener('pointerdown', closeOutside)
-    document.addEventListener('keydown', closeOnEscape)
-    return () => {
-      document.removeEventListener('pointerdown', closeOutside)
-      document.removeEventListener('keydown', closeOnEscape)
-    }
-  }, [pinned])
-
-  // A click pins a row open; clicking the pinned row closes it outright, even while still hovered.
-  const toggle = (key: StatKey) => {
-    if (pinned === key) {
-      setPinned(null)
-      setHovered(null)
-    } else {
-      setPinned(key)
-    }
-  }
-  const handleKeyDown = (key: StatKey) => (event: KeyboardEvent<HTMLDivElement>) => {
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault()
-      toggle(key)
-    } else if (event.key === 'Escape') {
-      setPinned(null)
-      setHovered(null)
-    }
-  }
-  const handleEnter = (key: StatKey) => (event: PointerEvent<HTMLDivElement>) => {
-    if (event.pointerType === 'mouse') setHovered(key)
-  }
-  const handleLeave = (key: StatKey) => (event: PointerEvent<HTMLDivElement>) => {
-    if (event.pointerType === 'mouse') setHovered((current) => (current === key ? null : current))
-  }
+  const { active, triggerProps } = useStatBreakdown(rootRef)
 
   return (
     <div className="butterfly">
@@ -117,10 +71,7 @@ export function ButterflyChart(props: ButterflyChartProps) {
                 aria-expanded={open}
                 aria-describedby={open ? popoverId : undefined}
                 aria-label={`${label}: ${playerName} ${playerStats[key]}, ${pokemonName} ${pokemonStats[key]}. Show how ${label} is calculated`}
-                onClick={() => toggle(key)}
-                onKeyDown={handleKeyDown(key)}
-                onPointerEnter={handleEnter(key)}
-                onPointerLeave={handleLeave(key)}
+                {...triggerProps(key)}
               >
                 <div className="butterfly-half butterfly-left" aria-hidden="true">
                   <Bar value={playerStats[key]} scaleMax={scaleMax} />

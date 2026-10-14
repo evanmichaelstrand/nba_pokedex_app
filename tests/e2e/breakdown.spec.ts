@@ -96,3 +96,52 @@ test('real touch taps open and switch breakdowns', async ({ page, isMobile }) =>
   await row(page, 'SPD').tap()
   await expect(tooltip(page)).toHaveCount(0)
 })
+
+test.describe('radar chart', () => {
+  test.beforeEach(async ({ page }) => {
+    await card(page).getByRole('button', { name: 'Radar' }).click()
+    await expect(card(page).getByRole('group', { name: /^Stat radar/ })).toBeVisible()
+  })
+
+  test('tapping a stat label shows its breakdown; tapping it again or elsewhere closes it', async ({ page }) => {
+    await row(page, 'ATK').click()
+    await expect(tooltip(page)).toContainText('Points per game')
+    await expect(row(page, 'ATK')).toHaveAttribute('aria-expanded', 'true')
+    await row(page, 'SPD').click()
+    await expect(tooltip(page)).toContainText('Average speed')
+    await row(page, 'SPD').click()
+    await expect(tooltip(page)).toHaveCount(0)
+
+    await row(page, 'HP').click()
+    await expect(tooltip(page)).toContainText('Games played')
+    await page.getByRole('banner').click()
+    await expect(tooltip(page)).toHaveCount(0)
+  })
+
+  test('every label has a breakdown that stays on the card', async ({ page }) => {
+    const cardBox = (await card(page).boundingBox())!
+    for (const stat of ['HP', 'ATK', 'DEF', 'SPD', 'SP\\. DEF', 'SP\\. ATK']) {
+      await row(page, stat).click()
+      const box = (await tooltip(page).boundingBox())!
+      expect(box.y, stat).toBeGreaterThanOrEqual(cardBox.y)
+      expect(box.y + box.height, stat).toBeLessThanOrEqual(cardBox.y + cardBox.height)
+      await row(page, stat).click()
+    }
+  })
+
+  test('keyboard: Enter opens, Escape closes', async ({ page }) => {
+    await row(page, 'DEF').focus()
+    await page.keyboard.press('Enter')
+    await expect(tooltip(page)).toContainText('Interior defensive FG%')
+    await page.keyboard.press('Escape')
+    await expect(tooltip(page)).toHaveCount(0)
+  })
+
+  test('mouse hover shows the breakdown and leaving hides it', async ({ page, isMobile }) => {
+    test.skip(isMobile, 'hover is a desktop interaction')
+    await row(page, 'SP\\. DEF').hover()
+    await expect(tooltip(page)).toContainText('Steals per game')
+    await page.getByRole('banner').hover()
+    await expect(tooltip(page)).toHaveCount(0)
+  })
+})
