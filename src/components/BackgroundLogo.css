@@ -14,6 +14,9 @@
   opacity: 0.12;
   /* The JPG has a white background; multiply drops it out against the page color. */
   mix-blend-mode: multiply;
+  /* Clip to a circle just outside the logo ring so the JPG square never shows an edge. */
+  -webkit-mask-image: radial-gradient(closest-side, #000 70%, transparent 72%);
+  mask-image: radial-gradient(closest-side, #000 70%, transparent 72%);
   transition: transform 350ms ease-out;
   will-change: transform;
 }

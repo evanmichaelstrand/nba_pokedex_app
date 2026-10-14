@@ -27,7 +27,7 @@
   padding: var(--space-2) var(--space-5);
   border: none;
   border-radius: 999px;
-  background: var(--color-accent);
+  background: var(--color-accent-strong);
   color: #fff;
   font: inherit;
   font-weight: 600;
