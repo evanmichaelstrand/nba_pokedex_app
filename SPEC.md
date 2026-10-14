@@ -79,7 +79,7 @@ Treat any blank value in these columns as "not available" and hide it rather tha
 - **Team logos:** `https://cdn.nba.com/logos/nba/{TEAM_ID}/primary/L/logo.svg`, shown next to team names (main and other teams). Unknown teams show no logo.
 - All are hot-linked by ID; no images are stored for players, Pokémon, or teams.
 - If an image fails to load, show a neutral silhouette placeholder. Never show a broken-image icon.
-- **Logo:** my nba_pokedex logo, stored in `public/` (`logo-bw.jpg` line art, `logo-color.jpg` full color).
+- **Logo:** my nba_pokedex logo, stored in `public/`: `logo-bw.jpg` (line art) and `logo_color_nobg.png` (full color, transparent background; the source file). The app uses `logo-color-128.png`, a 128px copy of the color logo, for the header and browser-tab icon so first load stays light — regenerate it if the source changes.
 
 ## Features & acceptance criteria
 
@@ -134,7 +134,7 @@ Done when: neighbors are visible on both sides at 390×844 and desktop, the focu
 
 ### F3 — Rotating background logo
 
-- The black-and-white line-art logo (`logo-bw.jpg`) sits behind the content, centered, large, and **semi-transparent** (about 8–12% opacity, tune for legibility). The color logo (`logo-color.jpg`) appears small in a header and does not rotate.
+- The black-and-white line-art logo (`logo-bw.jpg`) sits behind the content, centered, large, and **semi-transparent** (about 8–12% opacity, tune for legibility). The color logo (`logo-color-128.png`) appears small in a header and does not rotate.
 - Each navigation **rotates the logo 20° cumulatively**: next = +20°, previous = −20°. It never snaps back to 0.
 - Rotation animates smoothly (about 300–400 ms ease-out).
 - Under `prefers-reduced-motion`, rotation is instant (no animation).
@@ -238,7 +238,7 @@ The app lives at the root of this repo. The Python pipeline lives in a separate 
 
 ```
 public/
-  logo-bw.jpg, logo-color.jpg
+  logo-bw.jpg, logo_color_nobg.png (source), logo-color-128.png (header/icon)
   data/nba_pokemon_matches_unique_2526_clean.csv   # copied from the pipeline repo's output; path set by VITE_CSV_URL
 src/
   components/   # EntryCard, StatBars, TypeBadge, BackgroundLogo, NavControls, SearchBar, SortSelect

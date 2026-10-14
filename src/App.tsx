@@ -30,7 +30,7 @@ export default function App() {
   return (
     <div className="app">
       <header className="app-header">
-        <img className="app-logo" src={`${import.meta.env.BASE_URL}logo-color.jpg`} alt="" />
+        <img className="app-logo" src={`${import.meta.env.BASE_URL}logo-color-128.png`} alt="" />
         <div className="app-title-block">
           <h1 className="app-title">NBA Pokédex</h1>
           {SEASON && <p className="app-season">{SEASON.label}</p>}
