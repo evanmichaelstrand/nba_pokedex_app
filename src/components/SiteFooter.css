@@ -1,0 +1,20 @@
+.site-footer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  width: 100%;
+  max-width: 720px;
+  margin: var(--space-4) auto 0;
+  color: var(--color-text-muted);
+  font-size: 0.625rem;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.site-footer p {
+  margin: 0;
+}
+
+.site-footer strong {
+  color: var(--color-text);
+}

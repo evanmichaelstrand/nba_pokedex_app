@@ -39,6 +39,7 @@ Work one item at a time; check it off and commit when done (lint, unit tests, an
   - [x] Stat breakdowns on radar labels
   - [x] Dark mode (device setting by default, header toggle remembered per browser)
   - [x] "Adjusted" notice for players with manual stat changes (`*_diff` columns)
+  - [x] Footer with non-affiliation notice and trademark attributions
 - [ ] 12. **Visual design pass** (match the @nbapokedex posts)
   - [x] Stat colors, butterfly + radar charts with toggle, player/Pokémon series colors, Courier Prime font
   - [x] Graph-paper background, match-quality gauge, surnames in charts (faded player photo and sprite-in-ring deferred)

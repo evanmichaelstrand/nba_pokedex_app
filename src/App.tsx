@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { Pokedex } from './components/Pokedex'
 import { SearchBar } from './components/SearchBar'
+import { SiteFooter } from './components/SiteFooter'
 import { SortSelect } from './components/SortSelect'
 import { ErrorMessage, LoadingMessage } from './components/StatusMessage'
 import { ThemeToggle } from './components/ThemeToggle'
@@ -59,6 +60,7 @@ export default function App() {
           />
         )}
       </main>
+      <SiteFooter />
     </div>
   )
 }

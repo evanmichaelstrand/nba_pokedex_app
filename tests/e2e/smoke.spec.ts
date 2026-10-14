@@ -146,3 +146,13 @@ test('shows an error for a malformed file', async ({ page }) => {
   await page.goto('/')
   await expect(page.getByRole('alert')).toBeVisible()
 })
+
+test('footer states the site is unofficial and unaffiliated', async ({ page }) => {
+  await page.goto('/')
+  const footer = page.getByRole('contentinfo')
+  await expect(footer).toBeVisible()
+  await expect(footer).toContainText('not affiliated with')
+  for (const party of ['Nintendo', 'Game Freak', 'The Pokémon Company', 'National Basketball Association']) {
+    await expect(footer).toContainText(party)
+  }
+})
