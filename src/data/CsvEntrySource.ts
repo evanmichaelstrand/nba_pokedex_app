@@ -1,5 +1,5 @@
 import Papa from 'papaparse'
-import type { Entry, RealStats, StatLine } from './entry'
+import type { Entry, RealStats, StatAdjustments, StatLine } from './entry'
 import type { EntrySource } from './EntrySource'
 
 // Column names must match SPEC.md exactly. This file is the only place they appear.
@@ -36,6 +36,17 @@ const POKEMON_STAT_COLUMNS: Record<keyof StatLine, string> = {
   spDefense: 'pokemon_sp_defense',
   speed: 'pokemon_speed',
 }
+
+/** Optional: manual stat changes (adjusted − original). Missing or blank means no change. */
+const ADJUSTMENT_COLUMNS: Record<keyof StatLine, string> = {
+  hp: 'hp_diff',
+  attack: 'attack_diff',
+  defense: 'defense_diff',
+  spAttack: 'sp_attack_diff',
+  spDefense: 'sp_defense_diff',
+  speed: 'speed_diff',
+}
+const ADJUSTMENT_TOTAL_COLUMN = 'base_stat_total_diff'
 
 const REAL_STAT_COLUMNS: Record<Exclude<keyof RealStats, 'percentiles'>, string> = {
   heightIn: 'height',
@@ -126,6 +137,29 @@ function statLine(row: Row, columns: Record<keyof StatLine, string>): StatLine {
   }
 }
 
+function optionalNumber(row: Row, column: string): number {
+  const value = row[column]
+  if (!value) return 0
+  const n = parseNumber(value)
+  if (n === undefined) throw new RowError(`invalid ${column}`)
+  return n
+}
+
+/** The player's manual stat changes, or undefined when there are none. */
+function statAdjustments(row: Row): StatAdjustments | undefined {
+  const stats: StatLine = {
+    hp: optionalNumber(row, ADJUSTMENT_COLUMNS.hp),
+    attack: optionalNumber(row, ADJUSTMENT_COLUMNS.attack),
+    defense: optionalNumber(row, ADJUSTMENT_COLUMNS.defense),
+    spAttack: optionalNumber(row, ADJUSTMENT_COLUMNS.spAttack),
+    spDefense: optionalNumber(row, ADJUSTMENT_COLUMNS.spDefense),
+    speed: optionalNumber(row, ADJUSTMENT_COLUMNS.speed),
+  }
+  if (Object.values(stats).every((n) => n === 0)) return undefined
+  const sum = Object.values(stats).reduce((a, b) => a + b, 0)
+  return { stats, baseStatTotal: row[ADJUSTMENT_TOTAL_COLUMN] ? optionalNumber(row, ADJUSTMENT_TOTAL_COLUMN) : sum }
+}
+
 function snakeToCamel(s: string): string {
   return s.replace(/_([a-z0-9])/g, (_, c: string) => c.toUpperCase())
 }
@@ -154,6 +188,7 @@ function toEntry(row: Row): Entry {
       position: row[COLUMNS.position] || undefined,
       stats: statLine(row, PLAYER_STAT_COLUMNS),
       baseStatTotal: requiredNumber(row, COLUMNS.baseStatTotal),
+      statAdjustments: statAdjustments(row),
     },
     pokemon: {
       id: requiredInteger(row, COLUMNS.pokemonId),

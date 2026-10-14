@@ -34,6 +34,11 @@ Work one item at a time; check it off and commit when done (lint, unit tests, an
   - [x] Team logos next to team names
   - [x] Faded team-color tint on the card
   - [x] Progress slider for quick flipping (F2c)
+- [x] 11c. **UI feedback, round 2**
+  - [x] Team nicknames and smaller type badges on phones; other teams listed without a prefix
+  - [x] Stat breakdowns on radar labels
+  - [x] Dark mode (device setting by default, header toggle remembered per browser)
+  - [x] "Adjusted" notice for players with manual stat changes (`*_diff` columns)
 - [ ] 12. **Visual design pass** (match the @nbapokedex posts)
   - [x] Stat colors, butterfly + radar charts with toggle, player/Pokémon series colors, Courier Prime font
   - [x] Graph-paper background, match-quality gauge, surnames in charts (faded player photo and sprite-in-ring deferred)

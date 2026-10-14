@@ -1,7 +1,7 @@
 import { CsvEntrySource } from './CsvEntrySource'
 import type { EntrySource } from './EntrySource'
 
-export type { Entry, Player, Pokemon, RealStats, StatLine } from './entry'
+export type { Entry, Player, Pokemon, RealStats, StatAdjustments, StatLine } from './entry'
 export type { EntrySource } from './EntrySource'
 
 type SourceEnv = Pick<ImportMetaEnv, 'BASE_URL' | 'VITE_DATA_SOURCE' | 'VITE_CSV_URL'>

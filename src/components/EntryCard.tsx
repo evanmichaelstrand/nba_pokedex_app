@@ -7,6 +7,7 @@ import { formatDexNumber, formatPokemonName, shortPlayerName } from '../lib/form
 import { playerHeadshotUrls, pokemonSpriteUrls } from '../lib/images'
 import { pokemonSeriesColor } from '../lib/seriesColors'
 import { getTeam } from '../lib/teams'
+import { AdjustmentNotice } from './AdjustmentNotice'
 import { FallbackImage } from './FallbackImage'
 import { MatchGauge } from './MatchGauge'
 import { StatChart } from './StatChart'
@@ -45,7 +46,8 @@ export function EntryCard({
       style={{ '--team-color': team.color } as CSSProperties}
     >
       <div className="entry-matchup">
-        <section className="entry-side">
+        <section className="entry-side entry-side-player">
+          {player.statAdjustments && <AdjustmentNotice adjustments={player.statAdjustments} />}
           <div className="entry-image-frame entry-image-frame-player">
             <FallbackImage
               className="entry-image"

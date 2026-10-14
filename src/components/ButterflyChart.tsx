@@ -1,6 +1,6 @@
 import { useId, useRef, type CSSProperties } from 'react'
 import type { RealStats, StatLine } from '../data'
-import { useStatBreakdown } from '../hooks/useStatBreakdown'
+import { usePinnableHover } from '../hooks/usePinnableHover'
 import { statBreakdown } from '../lib/statBreakdown'
 import { barPercent, STAT_ROWS } from '../lib/stats'
 import { StatBreakdownPopover } from './StatBreakdownPopover'
@@ -40,7 +40,7 @@ export function ButterflyChart(props: ButterflyChartProps) {
   const { playerName, pokemonName, playerStats, pokemonStats, scaleMax, realStats } = props
   const idPrefix = useId()
   const rootRef = useRef<HTMLUListElement>(null)
-  const { active, triggerProps } = useStatBreakdown(rootRef)
+  const { active, triggerProps } = usePinnableHover<keyof StatLine>(rootRef)
 
   return (
     <div className="butterfly">

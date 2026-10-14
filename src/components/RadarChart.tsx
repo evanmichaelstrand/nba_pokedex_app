@@ -1,6 +1,6 @@
 import { useId, useRef, type CSSProperties } from 'react'
 import type { RealStats, StatLine } from '../data'
-import { useStatBreakdown } from '../hooks/useStatBreakdown'
+import { usePinnableHover } from '../hooks/usePinnableHover'
 import { axisPoint, RADAR_AXES, radarPolygon, ringPolygon } from '../lib/radar'
 import { statBreakdown } from '../lib/statBreakdown'
 import { StatBreakdownPopover } from './StatBreakdownPopover'
@@ -35,7 +35,7 @@ export function RadarChart(props: RadarChartProps) {
   const { playerName, pokemonName, playerStats, pokemonStats, scaleMax, realStats } = props
   const idPrefix = useId()
   const rootRef = useRef<HTMLDivElement>(null)
-  const { active, triggerProps } = useStatBreakdown(rootRef)
+  const { active, triggerProps } = usePinnableHover<keyof StatLine>(rootRef)
   const activeAxis = RADAR_AXES.findIndex(({ key }) => key === active)
   const rings: number[] = []
   for (let v = RING_STEP; v < scaleMax; v += RING_STEP) rings.push(v)

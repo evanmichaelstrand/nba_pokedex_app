@@ -131,3 +131,35 @@ describe('createEntrySource', () => {
     expect(() => createEntrySource({ BASE_URL: '/', VITE_DATA_SOURCE: 'nope', VITE_CSV_URL: '' })).toThrow(/Unknown/)
   })
 })
+
+describe('manual stat adjustments', () => {
+  const DIFF_HEADER = `${HEADER},hp_diff,attack_diff,defense_diff,sp_attack_diff,sp_defense_diff,speed_diff,base_stat_total_diff`
+  const withDiffs = (row: string, diffs: string) => [DIFF_HEADER, `${row},${diffs}`].join('\n')
+
+  it('parses non-zero diffs into statAdjustments', () => {
+    const { entries } = parseEntriesCsv(withDiffs(ROW_A, '20,-5,0,0,0,20,35'))
+    expect(entries[0].player.statAdjustments).toEqual({
+      stats: { hp: 20, attack: -5, defense: 0, spAttack: 0, spDefense: 0, speed: 20 },
+      baseStatTotal: 35,
+    })
+  })
+
+  it('treats all-zero or blank diffs as no adjustments', () => {
+    expect(parseEntriesCsv(withDiffs(ROW_A, '0,0,0,0,0,0,0')).entries[0].player.statAdjustments).toBeUndefined()
+    expect(parseEntriesCsv(withDiffs(ROW_A, ',,,,,,')).entries[0].player.statAdjustments).toBeUndefined()
+  })
+
+  it('works without the diff columns (older files)', () => {
+    expect(parseEntriesCsv(csv(ROW_A)).entries[0].player.statAdjustments).toBeUndefined()
+  })
+
+  it('sums the six diffs when the total is blank', () => {
+    expect(parseEntriesCsv(withDiffs(ROW_A, '10,0,0,0,0,5,')).entries[0].player.statAdjustments?.baseStatTotal).toBe(15)
+  })
+
+  it('skips a row with a non-numeric diff', () => {
+    const { entries, skipped } = parseEntriesCsv(withDiffs(ROW_A, 'lots,0,0,0,0,0,0'))
+    expect(entries).toEqual([])
+    expect(skipped[0].reason).toMatch(/hp_diff/)
+  })
+})

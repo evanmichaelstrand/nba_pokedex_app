@@ -1,15 +1,12 @@
 import { useEffect, useState, type KeyboardEvent, type PointerEvent, type RefObject } from 'react'
-import type { StatLine } from '../data'
-
-type StatKey = keyof StatLine
-
 /**
- * Which stat's breakdown is open in a chart. A tap/click pins one open; mouse hover shows one while
- * pointing. A pinned breakdown closes on a tap outside `rootRef`, on Escape, or on clicking it again.
+ * Which of a set of popovers (keyed by `K`) is open: a tap/click pins one open; mouse hover shows one
+ * while pointing. A pinned popover closes on a tap outside `rootRef`, on Escape, or on clicking its
+ * trigger again.
  */
-export function useStatBreakdown(rootRef: RefObject<Element | null>) {
-  const [pinned, setPinned] = useState<StatKey | null>(null)
-  const [hovered, setHovered] = useState<StatKey | null>(null)
+export function usePinnableHover<K extends string>(rootRef: RefObject<Element | null>) {
+  const [pinned, setPinned] = useState<K | null>(null)
+  const [hovered, setHovered] = useState<K | null>(null)
 
   useEffect(() => {
     if (!pinned) return
@@ -27,8 +24,8 @@ export function useStatBreakdown(rootRef: RefObject<Element | null>) {
     }
   }, [pinned, rootRef])
 
-  // Clicking the pinned stat closes it outright, even while still hovered.
-  const toggle = (key: StatKey) => {
+  // Clicking the pinned trigger closes it outright, even while still hovered.
+  const toggle = (key: K) => {
     if (pinned === key) {
       setPinned(null)
       setHovered(null)
@@ -37,8 +34,8 @@ export function useStatBreakdown(rootRef: RefObject<Element | null>) {
     }
   }
 
-  /** Props that make an element the trigger for `key`'s breakdown. */
-  const triggerProps = (key: StatKey) => ({
+  /** Props that make an element the trigger for `key`'s popover. */
+  const triggerProps = (key: K) => ({
     onClick: () => toggle(key),
     onKeyDown: (event: KeyboardEvent<Element>) => {
       if (event.key === 'Enter' || event.key === ' ') {

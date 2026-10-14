@@ -33,6 +33,11 @@
   text-align: center;
 }
 
+/* Anchors the "Adjusted" notice to the headshot's corner. */
+.entry-side-player {
+  position: relative;
+}
+
 .entry-image-frame {
   width: 100%;
   aspect-ratio: 1040 / 760;

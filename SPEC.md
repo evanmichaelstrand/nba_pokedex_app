@@ -65,9 +65,20 @@ These are the real numbers behind the six player stats. They're in the CSV so th
 
 Treat any blank value in these columns as "not available" and hide it rather than showing 0.
 
+#### Manual adjustment columns (optional, after the supporting stats)
+
+Some player stat lines were adjusted by hand. The six player stat columns and `base_stat_total` already include these changes; these columns record how much each was changed, so the card can show it.
+
+| Column(s) | Notes |
+|---|---|
+| `hp_diff`, `attack_diff`, `defense_diff`, `sp_attack_diff`, `sp_defense_diff`, `speed_diff` | int. Adjusted value − original value; positive means raised. `0` or blank = unchanged. |
+| `base_stat_total_diff` | int. Sum of the six diffs. |
+
+The columns may be missing entirely (older files): treat that as no adjustments. A player with any non-zero diff shows an "Adjusted" notice on their card; hovering or tapping it lists the non-zero changes (e.g. `SPD +20`, `ATK −5`) and the BST change.
+
 ### Teams
 
-- Show `main_team` prominently. If `other_teams` is non-empty, split it on `;` and show those teams as secondary (e.g. "Also played for: Cleveland Cavaliers").
+- Show `main_team` prominently. If `other_teams` is non-empty, split it on `;` and show those teams as secondary: muted, below the main team, with no visible prefix (screen readers hear "Also played for"). On phones, team names drop the city (e.g. "Cavaliers").
 - Map abbreviations to full team names and team colors via a static lookup table in the code (all 30 teams).
 - An unknown abbreviation should display as-is, not crash.
 

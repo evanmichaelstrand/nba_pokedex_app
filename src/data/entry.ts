@@ -18,6 +18,14 @@ export interface Player {
   position?: string
   stats: StatLine
   baseStatTotal: number
+  /** Manual changes already applied to `stats`; absent when the player has none. */
+  statAdjustments?: StatAdjustments
+}
+
+/** How much each stat was changed by hand (adjusted − original); positive means raised. */
+export interface StatAdjustments {
+  stats: StatLine
+  baseStatTotal: number
 }
 
 export interface Pokemon {
