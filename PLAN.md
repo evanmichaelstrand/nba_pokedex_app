@@ -18,7 +18,7 @@ Work one item at a time; check it off and commit when done (lint, unit tests, an
 - [x] 6. **Navigation (F2, part 1)** — deck index by `PLAYER_ID`, prev/next buttons, ← / → keys, wraparound, position indicator. Default order by Pokémon ID.
 - [x] 7. **Swipe (F2, part 2)** — `useSwipe` with pointer events (touch + mouse), threshold snap-back, no skipping/desync on rapid swipes.
 - [x] 8. **Rotating logo (F3)** — cumulative rotation constant (20°), 300–400 ms ease-out, instant under `prefers-reduced-motion`. Rotation math unit-tested.
-- [ ] 8b. **3D deck (F2b)** — *prototype first, tune on a phone, then commit.* Cylinder-style carousel with CSS 3D transforms: focused card pops forward, neighbors angled/dimmed on each side; drag rotates the cylinder and settles on release. Peek cards (artwork + player name) on mobile, scaled full cards on desktop. Flat fallback under `prefers-reduced-motion`. No library; reuses deck navigation and swipe logic.
+- [x] 8b. **3D deck (F2b)** — *prototype first, tune on a phone, then commit.* Cylinder-style carousel with CSS 3D transforms: focused card pops forward, neighbors angled/dimmed on each side; drag rotates the cylinder and settles on release. Peek cards (artwork + player name) on mobile, scaled full cards on desktop. Flat fallback under `prefers-reduced-motion`. No library; reuses deck navigation and swipe logic.
 
 ## Search, sort, URL
 

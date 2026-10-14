@@ -1,0 +1,44 @@
+.peek-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-1);
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  overflow: hidden;
+}
+
+/* Only the inner edge is on screen, so content hugs it. */
+.peek-card[data-side='right'] {
+  align-items: flex-start;
+  text-align: left;
+}
+
+.peek-card[data-side='left'] {
+  align-items: flex-end;
+  text-align: right;
+}
+
+.peek-image {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+}
+
+.peek-name,
+.peek-pokemon {
+  max-width: 50%;
+  margin: 0;
+  font-size: 0.75rem;
+  line-height: 1.2;
+}
+
+.peek-name {
+  font-weight: 800;
+}
+
+.peek-pokemon {
+  color: var(--color-text-muted);
+}

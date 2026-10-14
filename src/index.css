@@ -111,18 +111,25 @@ body {
 @media (min-width: 640px) {
   .pokedex {
     display: grid;
-    grid-template-columns: 48px minmax(0, 480px) 48px;
-    justify-content: center;
+    grid-template-columns: 48px minmax(0, 1fr) 48px;
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
     align-items: center;
     column-gap: var(--space-5);
   }
 
-  .pokedex > .swipe-area {
+  .pokedex > .deck {
     grid-area: 1 / 2;
   }
 
   .pokedex .nav {
     display: contents;
+  }
+
+  .pokedex .nav-button {
+    position: relative;
+    z-index: 200;
   }
 
   .pokedex .nav-button:first-of-type {

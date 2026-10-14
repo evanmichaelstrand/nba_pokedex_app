@@ -61,7 +61,7 @@ test.describe('with a small deck', () => {
   test('a short drag snaps back without navigating', async ({ page }) => {
     await mouseDrag(page, -40, 600)
     await expect(playerName(page)).toHaveText('First Player')
-    await expect(page.locator('.swipe-area')).not.toHaveAttribute('style', /translateX/)
+    await expect(page.locator('.deck-slot[data-offset="0"]')).toHaveAttribute('style', /translateX\(0%\)/)
   })
 
   test('rapid swipes do not skip or desync', async ({ page }) => {
@@ -83,7 +83,7 @@ test.describe('with a small deck', () => {
 })
 
 async function swipeStart(page: Page) {
-  const box = (await page.locator('.swipe-area').boundingBox())!
+  const box = (await page.locator('.deck').boundingBox())!
   return { x: box.x + box.width / 2, y: box.y + box.height / 2 }
 }
 
@@ -121,7 +121,7 @@ test('every entry renders fully and fits the viewport', async ({ page }) => {
   for (let i = 1; i <= total; i++) {
     await expect(position(page)).toHaveText(at(i, total))
     const problem = await page.evaluate(() => {
-      const card = document.querySelector('article')
+      const card = document.querySelector('.deck-slot[data-offset="0"] article')
       const headings = [...(card?.querySelectorAll('h2') ?? [])].map((h) => h.textContent?.trim())
       if (headings.length !== 2 || headings.some((h) => !h)) return `missing names: ${JSON.stringify(headings)}`
       if (card?.querySelectorAll('.type-badge').length === 0) return 'no type badge'

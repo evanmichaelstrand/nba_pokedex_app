@@ -1,0 +1,64 @@
+.deck {
+  --card-w: min(80%, 480px);
+  position: relative;
+  display: flex;
+  justify-content: center;
+  perspective: 1100px;
+  /* Browser keeps vertical scrolling; horizontal drags are ours. */
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: grab;
+}
+
+.deck[data-flat] {
+  --card-w: min(100%, 480px);
+}
+
+.deck[data-dragging] {
+  cursor: grabbing;
+}
+
+.deck img {
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+
+.deck-slot {
+  display: flex;
+  width: var(--card-w);
+  transition:
+    transform 340ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    opacity 340ms ease-out;
+  will-change: transform, opacity;
+}
+
+.deck-slot > * {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Neighbors share the focused card's box (its height drives the deck's height). */
+.deck-slot:not([data-offset='0']) {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(50% - var(--card-w) / 2);
+}
+
+.deck-slot:not([data-offset='0']) > * {
+  overflow: hidden;
+}
+
+.deck[data-dragging] .deck-slot,
+.deck[data-flat] .deck-slot {
+  transition: none;
+}
+
+/* Phones: run the deck to the screen edges so neighbors peek out further. */
+@media (max-width: 639px) {
+  .deck:not([data-flat]) {
+    --card-w: 76%;
+    margin-inline: calc(-1 * var(--space-4));
+  }
+}
