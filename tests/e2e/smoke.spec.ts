@@ -52,9 +52,13 @@ test('renders other teams, single types, and form IDs cleanly', async ({ page })
   await page.route(CSV, (route) => route.fulfill({ path: EDGE_FIXTURE }))
   await page.goto('/')
   const entry = card(page)
+  // Phones show team nicknames only (no city).
+  const narrow = (page.viewportSize()?.width ?? 0) < 640
   await expect(entry.getByRole('heading', { name: 'Edge Case Player' })).toBeVisible()
-  await expect(entry.getByText('Denver Nuggets')).toBeVisible()
-  await expect(entry.getByText('Also played for: Cleveland Cavaliers, Boston Celtics')).toBeVisible()
+  await expect(entry.getByText(narrow ? 'Nuggets' : 'Denver Nuggets', { exact: true })).toBeVisible()
+  await expect(
+    entry.getByText(`Also played for: ${narrow ? 'Cavaliers, Celtics' : 'Cleveland Cavaliers, Boston Celtics'}`),
+  ).toBeVisible()
   await expect(entry.getByRole('heading', { name: 'Mega Tyranitar' })).toBeVisible()
   await expect(entry.getByText('Rock', { exact: true })).toBeVisible()
   await expect(entry.getByText(/^#\d+$/)).toHaveCount(0)

@@ -13,14 +13,27 @@ import { PLACEHOLDER_IMAGE_URL, pokemonArtworkUrl } from '../../src/lib/images'
 
 describe('getTeam', () => {
   it('looks up known teams case-insensitively', () => {
-    expect(getTeam('DEN')).toEqual({ abbreviation: 'DEN', name: 'Denver Nuggets', color: '#0e2240', id: 1610612743 })
+    expect(getTeam('DEN')).toEqual({
+      abbreviation: 'DEN',
+      name: 'Denver Nuggets',
+      nickname: 'Nuggets',
+      color: '#0e2240',
+      id: 1610612743,
+    })
     expect(getTeam('lal').name).toBe('Los Angeles Lakers')
+  })
+
+  it('has a city-free nickname for every team, including multi-word ones', () => {
+    expect(getTeam('POR').nickname).toBe('Trail Blazers')
+    expect(getTeam('PHI').nickname).toBe('76ers')
+    expect(getTeam('XYZ').nickname).toBe('XYZ')
   })
 
   it('passes unknown abbreviations through', () => {
     const team = getTeam('XYZ')
     expect(team.abbreviation).toBe('XYZ')
     expect(team.name).toBe('XYZ')
+    expect(team.nickname).toBe('XYZ')
     expect(team.color).toMatch(/^#[0-9a-f]{6}$/)
   })
 
