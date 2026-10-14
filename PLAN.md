@@ -15,7 +15,7 @@ Work one item at a time; check it off and commit when done (lint, unit tests, an
 ## Entry view and navigation
 
 - [x] 5. **EntryCard (F1)** — player, teams, Pokémon, TypeBadge, StatBars on a shared scale, match %. Image fallback to silhouette. Fits 390×844 without scrolling.
-- [ ] 6. **Navigation (F2, part 1)** — deck index by `PLAYER_ID`, prev/next buttons, ← / → keys, wraparound, position indicator. Default order by Pokémon ID.
+- [x] 6. **Navigation (F2, part 1)** — deck index by `PLAYER_ID`, prev/next buttons, ← / → keys, wraparound, position indicator. Default order by Pokémon ID.
 - [ ] 7. **Swipe (F2, part 2)** — `useSwipe` with pointer events (touch + mouse), threshold snap-back, no skipping/desync on rapid swipes.
 - [ ] 8. **Rotating logo (F3)** — cumulative rotation constant (20°), 300–400 ms ease-out, instant under `prefers-reduced-motion`. Rotation math unit-tested.
 
