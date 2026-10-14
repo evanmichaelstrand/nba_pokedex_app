@@ -9,10 +9,11 @@
   line-height: 1.4;
 }
 
-/* Phones: ~30% smaller so the Dex number and both types fit on one line. */
+/* Phones: ~30% smaller and no letter spacing, so the Dex number and both types fit on one line. */
 @media (max-width: 639px) {
   .type-badge {
     padding: 1px var(--space-1);
     font-size: 0.5rem;
+    letter-spacing: 0;
   }
 }

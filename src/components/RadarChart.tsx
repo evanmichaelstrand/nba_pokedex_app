@@ -61,12 +61,7 @@ export function RadarChart(props: RadarChartProps) {
         >
           <polygon className="radar-ring radar-ring-outer" points={ringPolygon(RADIUS)} />
           {rings.map((v) => (
-            <g key={v}>
-              <polygon className="radar-ring" points={ringPolygon((v / scaleMax) * RADIUS)} />
-              <text className="radar-tick" x={2} y={-(v / scaleMax) * RADIUS - 2}>
-                {v}
-              </text>
-            </g>
+            <polygon key={v} className="radar-ring" points={ringPolygon((v / scaleMax) * RADIUS)} />
           ))}
           {RADAR_AXES.map((_, axis) => {
             const end = axisPoint(axis, RADIUS)
@@ -74,6 +69,12 @@ export function RadarChart(props: RadarChartProps) {
           })}
           <polygon className="radar-shape" points={radarPolygon(playerStats, scaleMax, RADIUS)} style={{ '--shape': props.playerColor } as CSSProperties} />
           <polygon className="radar-shape" points={radarPolygon(pokemonStats, scaleMax, RADIUS)} style={{ '--shape': props.pokemonColor } as CSSProperties} />
+          {/* Scale numbers go on top of the shapes so they stay readable. */}
+          {rings.map((v) => (
+            <text key={v} className="radar-tick" x={2} y={-(v / scaleMax) * RADIUS - 2}>
+              {v}
+            </text>
+          ))}
           {RADAR_AXES.map(({ key, label, token }, axis) => {
             const { x, y } = axisPoint(axis, RADIUS + LABEL_OFFSET)
             const width = label.length * CHAR_WIDTH + 12

@@ -47,7 +47,8 @@
   --grid-major-size: calc(var(--grid-size) * 5);
   --color-surface: #ffffff;
   --color-text: #1a1a1a;
-  --color-text-muted: #5c5c5c;
+  /* Dark enough to stay legible over the background logo's lines. */
+  --color-text-muted: #525252;
   --color-border: #e2e2de;
   --color-accent: #f26b1d;
   /* Darker accent for white text on an accent background (WCAG AA). */

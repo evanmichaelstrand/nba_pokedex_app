@@ -66,6 +66,11 @@
   font-size: 10px;
   font-weight: 700;
   fill: var(--color-text-muted);
+  /* A halo in the card color keeps the scale numbers readable where they cross the stat shapes. */
+  paint-order: stroke;
+  stroke: var(--color-surface);
+  stroke-width: 3px;
+  stroke-linejoin: round;
 }
 
 .radar-shape {
