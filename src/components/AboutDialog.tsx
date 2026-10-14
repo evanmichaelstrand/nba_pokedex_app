@@ -15,7 +15,7 @@ const SOCIALS = [
 const DRAWBACKS = [
   'NBA player value is often disproportionately skewed toward offensive contribution, while Pokémon-style stats force a player’s BST to be made up of offense and defense in essentially equal parts.',
   'Many stat categories have room for improvement in how much statistical context they include.',
-  'Percentile analysis is applied to statistics whose distributions aren’t uniform, which is not ideal but is common practice.',
+  'Percentile analysis applied to statistics where shape is non-uniform is not ideal but utilized regardless.',
 ]
 
 /** An "About" button that opens a dialog explaining how the stats are built. */
